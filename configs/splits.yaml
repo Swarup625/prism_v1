@@ -1,0 +1,49 @@
+# ==============================================================
+# PRISM - DATA SPLIT CONFIGURATION
+# ==============================================================
+
+splits:
+
+  train:
+    name: "train"
+    description: "Historical match states used for model training"
+    matches: 262
+    states: 4812
+
+  validation:
+    name: "validation"
+    description: "Match states used for model selection and threshold tuning"
+    matches: 71
+    states: 1285
+
+  test_2025:
+    name: "test_2025"
+    description: "Reserved final evaluation dataset"
+    matches: 70
+    states: 1268
+    usage: "final evaluation only"
+
+  test_2026:
+    name: "test_2026"
+    description: "Reserved final evaluation dataset"
+    matches: 72
+    states: 1300
+    usage: "final evaluation only"
+
+split_rules:
+  unit_of_splitting: "match_id"
+
+  leakage_prevention:
+    match_overlap_allowed: false
+    validation_used_for_model_training: false
+    test_used_for_model_selection: false
+    test_used_for_threshold_tuning: false
+
+  final_evaluation:
+    test_sets:
+      - test_2025
+      - test_2026
+    tuning_allowed: false
+
+manifest:
+  path: "data/split_manifest.csv"

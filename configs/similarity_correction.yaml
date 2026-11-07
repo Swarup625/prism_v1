@@ -1,0 +1,104 @@
+# ==============================================================
+# PRISM - HISTORICAL SIMILARITY CORRECTION CONFIGURATION
+# ==============================================================
+
+experiment:
+  name: "PRISM Historical Similarity Corrector"
+  random_seed: 42
+
+data:
+
+  dataset_path: "data/match_states.parquet"
+
+  reference_split: "train"
+  evaluation_split: "validation"
+
+  reserved_test_splits:
+    - "test_2025"
+    - "test_2026"
+
+similarity_features:
+
+  - current_score
+  - wickets_lost
+  - runs_required
+  - balls_remaining
+  - current_run_rate
+  - required_run_rate
+  - runs_last_3_overs
+  - wickets_last_3_overs
+
+neighbor_search:
+
+  method: "nearest_neighbors"
+
+  candidate_k_values:
+    - 5
+    - 10
+    - 15
+    - 25
+    - 50
+
+  selected_k: 50
+
+  selection_data: "validation"
+  selection_criterion: "highest_roc_auc"
+
+  validation_results:
+    accuracy: 0.7891
+    f1_score: 0.7858
+    roc_auc: 0.8837
+
+historical_evidence:
+
+  probability:
+    description: >
+      Fraction of similar historical situations in which the
+      chasing team won.
+
+  prediction:
+    description: >
+      Alternative outcome suggested by the majority of the
+      nearest historical situations.
+
+  evidence_fields:
+    - neighbor_count
+    - support_chasing_win
+    - support_chasing_loss
+    - mean_neighbor_distance
+    - min_neighbor_distance
+    - max_neighbor_distance
+    - similarity_confidence
+
+correction_policy:
+
+  automatic_correction: false
+
+  purpose: >
+    The similarity module provides historical evidence to the
+    PRISM verifier. It does not independently replace the
+    baseline prediction.
+
+validation_analysis:
+
+  baseline_similarity_disagreement_rate: 0.1533
+
+  baseline_wrong_similarity_correct: 88
+  baseline_correct_similarity_wrong: 109
+
+  conclusion: >
+    Similarity predictions should not be used as an automatic
+    correction mechanism because always switching decreases
+    overall validation accuracy.
+
+outputs:
+
+  neighbor_analysis_path: "results/neighbor_analysis.csv"
+  tuning_results_path: "results/similarity_tuning_results.csv"
+  report_path: "docs/similarity_correction_report.md"
+
+reproducibility:
+
+  validation_used_for_k_selection: true
+  test_sets_used_for_tuning: false
+  test_sets_used_for_selection: false

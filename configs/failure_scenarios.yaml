@@ -1,0 +1,99 @@
+# ==============================================================
+# PRISM - ROBUSTNESS AND FAILURE SCENARIOS
+# ==============================================================
+# These scenarios are evaluated using frozen models and thresholds.
+# No model retraining or threshold tuning is permitted on test data.
+# ==============================================================
+
+experiment:
+  name: "PRISM Robustness Evaluation"
+  random_seed: 42
+
+datasets:
+  test_splits:
+    - test_2025
+    - test_2026
+
+baseline:
+  model: "random_forest"
+
+prism:
+  risk_threshold: 0.50
+  similarity_confidence_threshold: 0.65
+  similarity_support_threshold: 0.50
+  historical_neighbors: 50
+
+# --------------------------------------------------------------
+# Scenario 1: Clean evaluation
+# --------------------------------------------------------------
+clean:
+  enabled: true
+  description: "Evaluation on the original, unchanged test data."
+
+# --------------------------------------------------------------
+# Scenario 2: Numerical feature noise
+# --------------------------------------------------------------
+noise:
+  enabled: true
+
+  # Relative Gaussian noise levels.
+  # Each level is evaluated independently.
+  levels:
+    - 0.02
+    - 0.05
+    - 0.10
+
+  features:
+    - current_score
+    - runs_required
+    - current_run_rate
+    - required_run_rate
+    - runs_last_3_overs
+
+# --------------------------------------------------------------
+# Scenario 3: Missing feature conditions
+# --------------------------------------------------------------
+missing_features:
+  enabled: true
+
+  scenarios:
+    recent_form_missing:
+      features:
+        - runs_last_3_overs
+        - wickets_last_3_overs
+
+    run_rate_missing:
+      features:
+        - current_run_rate
+        - required_run_rate
+
+# --------------------------------------------------------------
+# Scenario 4: Difficult match situations
+# --------------------------------------------------------------
+difficult_states:
+  enabled: true
+
+  scenarios:
+    low_confidence:
+      max_confidence: 0.60
+
+    late_match:
+      min_over_completed: 15
+
+    high_required_rate:
+      min_required_run_rate: 10.0
+
+# --------------------------------------------------------------
+# Evaluation metrics
+# --------------------------------------------------------------
+metrics:
+  - accuracy
+  - precision
+  - recall
+  - f1_score
+  - coverage
+  - selective_risk
+  - error_detection_rate
+  - error_recovery_rate
+  - harmful_correction_rate
+  - runtime_seconds

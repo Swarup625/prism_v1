@@ -1,0 +1,48 @@
+# ==============================================================
+# PRISM - DATA CONFIGURATION
+# ==============================================================
+
+dataset:
+  name: "IPL Match State Dataset"
+
+  processed_matches_path: "data/processed/matches.csv"
+  processed_deliveries_path: "data/processed/deliveries.parquet"
+  match_states_path: "data/match_states.parquet"
+
+target:
+  column: "chasing_team_won"
+  description: "1 if the team batting second wins, 0 otherwise"
+
+match_state:
+  total_states: 8665
+  total_matches: 475
+
+features:
+  numerical:
+    - over_completed
+    - current_score
+    - wickets_lost
+    - target
+    - runs_required
+    - balls_remaining
+    - current_run_rate
+    - required_run_rate
+    - runs_last_3_overs
+    - wickets_last_3_overs
+
+  categorical:
+    - venue
+    - batting_team
+    - bowling_team
+
+metadata:
+  - match_id
+  - date
+  - season
+  - split
+
+data_quality:
+  missing_values_allowed: false
+  negative_scores_allowed: false
+  maximum_wickets: 10
+  maximum_over_completed: 19

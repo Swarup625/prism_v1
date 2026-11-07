@@ -1,0 +1,35 @@
+PRISM Baseline Model Experiment
+==================================================
+
+Dataset: D:\PRISM\data\match_states.parquet
+Training states: 4812
+Validation states: 1285
+
+Training seasons: 2020/21–2023
+Validation season: 2024
+Test seasons: 2025 and 2026 (NOT USED HERE)
+
+Selected baseline model: random_forest
+Selection criterion: Highest validation ROC-AUC
+
+Numerical features:
+- over_completed
+- current_score
+- wickets_lost
+- target
+- runs_required
+- balls_remaining
+- current_run_rate
+- required_run_rate
+- runs_last_3_overs
+- wickets_last_3_overs
+
+Categorical features:
+- venue
+- batting_team
+- bowling_team
+
+Software information:
+Python platform: Windows-10-10.0.26200-SP0
+Pandas version: 2.3.3
+NumPy version: 2.4.2

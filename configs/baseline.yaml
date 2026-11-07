@@ -1,0 +1,83 @@
+# ==============================================================
+# PRISM - BASELINE MODEL CONFIGURATION
+# ==============================================================
+
+experiment:
+  name: "Baseline IPL Match Outcome Prediction"
+  random_seed: 42
+
+data:
+  dataset_path: "data/match_states.parquet"
+  target_column: "chasing_team_won"
+
+  training_split: "train"
+  validation_split: "validation"
+
+  reserved_test_splits:
+    - "test_2025"
+    - "test_2026"
+
+features:
+
+  numerical:
+    - over_completed
+    - current_score
+    - wickets_lost
+    - target
+    - runs_required
+    - balls_remaining
+    - current_run_rate
+    - required_run_rate
+    - runs_last_3_overs
+    - wickets_last_3_overs
+
+  categorical:
+    - venue
+    - batting_team
+    - bowling_team
+
+models:
+
+  logistic_regression:
+    enabled: true
+    output_path: "models/logistic_regression.joblib"
+
+  random_forest:
+    enabled: true
+    output_path: "models/random_forest.joblib"
+
+  hist_gradient_boosting:
+    enabled: true
+    output_path: "models/hist_gradient_boosting.joblib"
+
+model_selection:
+
+  criterion: "roc_auc"
+  selection_data: "validation"
+  selected_model: "random_forest"
+
+selected_model:
+
+  name: "random_forest"
+  model_path: "models/random_forest.joblib"
+
+  validation_results:
+    accuracy: 0.8054
+    precision: 0.8553
+    recall: 0.7245
+    f1_score: 0.7845
+    roc_auc: 0.8843
+    log_loss: 0.4410
+
+outputs:
+
+  metrics_path: "results/baseline_metrics.csv"
+  validation_predictions_path: "results/baseline_validation_predictions.parquet"
+  oof_predictions_path: "results/baseline_oof_predictions.parquet"
+  experiment_report: "docs/baseline_experiment_report.md"
+
+reproducibility:
+
+  random_seed: 42
+  test_sets_used_for_selection: false
+  test_sets_used_for_tuning: false

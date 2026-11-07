@@ -1,0 +1,65 @@
+# ==============================================================
+# PRISM - RELIABILITY SIGNAL CONFIGURATION
+# ==============================================================
+
+experiment:
+  name: "PRISM Reliability Signal Analysis"
+
+data:
+  validation_predictions_path: "results/baseline_validation_predictions.parquet"
+  oof_predictions_path: "results/baseline_oof_predictions.parquet"
+
+signals:
+
+  confidence:
+    enabled: true
+    description: >
+      Confidence of the baseline model in its predicted class.
+      Lower confidence generally indicates greater prediction risk.
+
+    risk_relationship: "inverse"
+
+  probability_margin:
+    enabled: true
+    description: >
+      Difference between the probabilities of the predicted and
+      alternative outcomes. A smaller margin indicates greater uncertainty.
+
+    risk_relationship: "inverse"
+
+  predictive_entropy:
+    enabled: true
+    description: >
+      Entropy of the predicted probability distribution.
+      Higher entropy indicates greater predictive uncertainty.
+
+    risk_relationship: "direct"
+
+error_label:
+
+  column: "prediction_error"
+
+  definition:
+    correct_prediction: 0
+    incorrect_prediction: 1
+
+confidence_ranges:
+
+  enabled: true
+
+  bins:
+    - [0.50, 0.60]
+    - [0.60, 0.70]
+    - [0.70, 0.80]
+    - [0.80, 0.90]
+    - [0.90, 1.00]
+
+outputs:
+
+  validation_signals_path: "results/reliability_signals.parquet"
+  oof_signals_path: "results/reliability_signals_oof.parquet"
+  signal_analysis_path: "results/signal_analysis.csv"
+
+reproducibility:
+
+  test_sets_used: false

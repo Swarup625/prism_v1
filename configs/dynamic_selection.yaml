@@ -1,0 +1,98 @@
+# ==============================================================
+# PRISM - DYNAMIC ALTERNATIVE MODEL SELECTION CONFIGURATION
+# ==============================================================
+
+experiment:
+  name: "PRISM Dynamic Alternative Model Selection"
+  random_seed: 42
+
+data:
+
+  dataset_path: "data/match_states.parquet"
+
+  evaluation_split: "validation"
+
+  reserved_test_splits:
+    - "test_2025"
+    - "test_2026"
+
+models:
+
+  baseline:
+
+    name: "random_forest"
+    model_path: "models/random_forest.joblib"
+
+  alternatives:
+
+    logistic_regression:
+      model_path: "models/logistic_regression.joblib"
+
+    hist_gradient_boosting:
+      model_path: "models/hist_gradient_boosting.joblib"
+
+prediction_evidence:
+
+  record_for_each_model:
+    - predicted_class
+    - predicted_probability
+    - confidence
+
+  disagreement_analysis: true
+
+  evidence_fields:
+    - votes_for_0
+    - votes_for_1
+    - max_model_agreement
+    - all_models_agree
+    - model_disagreement
+    - alternative_prediction
+    - alternative_confidence
+    - alternative_consensus
+
+alternative_consensus:
+
+  description: >
+    Alternative evidence is generated when the alternative models
+    provide a consensus prediction that differs from the baseline.
+
+  automatic_correction: false
+
+validation_results:
+
+  model_disagreement_rate: 0.1844
+
+  baseline_error_rate:
+    models_agree: 0.1498
+    models_disagree: 0.3924
+
+  alternative_consensus_states: 62
+
+  alternative_consensus_analysis:
+    baseline_wrong_alternative_correct: 31
+    baseline_correct_alternative_wrong: 31
+
+policy:
+
+  evidence_only: true
+
+  purpose: >
+    Alternative model predictions are provided as evidence to the
+    PRISM verification module. No automatic model switching is
+    performed.
+
+outputs:
+
+  disagreement_path: "results/model_disagreement.csv"
+
+  predictions_path: >
+    results/dynamic_selector_predictions.parquet
+
+  model_metrics_path: "results/alternative_model_metrics.csv"
+
+  report_path: "docs/selection_policy_report.md"
+
+reproducibility:
+
+  test_sets_used_for_tuning: false
+  test_sets_used_for_model_selection: false
