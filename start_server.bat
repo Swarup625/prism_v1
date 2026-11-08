@@ -9,3 +9,4 @@ echo Serving Web Application and REST API on http://localhost:8000
 echo.
 python backend\server.py 8000
 pause
+
