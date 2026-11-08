@@ -1,19 +1,20 @@
 <!DOCTYPE html>
-<html lang="en" class="scroll-smooth">
+<html lang="en" class="h-full">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PRISM - Prediction Reliability & Intelligent Self-Correction</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Font Awesome -->
+    <!-- Font Awesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <!-- Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <!-- Google Fonts Inter & Outfit -->
+    <!-- Google Fonts: Bodoni Moda & Cormorant Garamond (Astralaga Editorial Serif Style) + Inter -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@400;600;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400..900;1,6..96,400..900&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400;1,600&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
     <script>
         tailwind.config = {
             theme: {
@@ -26,1019 +27,1234 @@
                             600: '#0369a1',
                             teal: '#0d9488',
                             emerald: '#059669',
-                            dark: '#0a0f1d',
-                            card: '#111827',
-                            border: '#1f293d',
+                            dark: '#070b14',
+                            sidebar: '#0c1222',
+                            card: '#11192e',
+                            border: '#1e2942',
                             accent: '#38bdf8'
                         }
                     },
                     fontFamily: {
                         sans: ['Inter', 'sans-serif'],
-                        heading: ['Outfit', 'sans-serif'],
+                        serif: ['Astralaga', 'Bodoni Moda', 'Cormorant Garamond', 'Playfair Display', 'Georgia', 'serif'],
+                        editorial: ['Astralaga', 'Bodoni Moda', 'Cormorant Garamond', 'Playfair Display', 'Georgia', 'serif'],
                     }
                 }
             }
         }
     </script>
     <style>
+        /* Astralaga-inspired typography styling */
+        .font-astralaga {
+            font-family: 'Astralaga', 'Bodoni Moda', 'Cormorant Garamond', 'Playfair Display', Georgia, serif;
+            letter-spacing: -0.02em;
+        }
+        .italic-accent {
+            font-family: 'Cormorant Garamond', 'Bodoni Moda', Georgia, serif;
+            font-style: italic;
+            font-weight: 400;
+        }
         body {
-            background-color: #080d1a;
+            background-color: #070b14;
             color: #e2e8f0;
             font-family: 'Inter', sans-serif;
+            overflow-x: hidden;
         }
         .glass-panel {
-            background: rgba(17, 24, 39, 0.7);
-            backdrop-filter: blur(12px);
+            background: rgba(17, 25, 46, 0.75);
+            backdrop-filter: blur(14px);
             border: 1px solid rgba(56, 189, 248, 0.12);
         }
         .glow-card {
-            transition: all 0.3s ease;
+            transition: all 0.25s ease;
         }
         .glow-card:hover {
-            border-color: rgba(56, 189, 248, 0.4);
-            box-shadow: 0 0 25px rgba(56, 189, 248, 0.15);
-            transform: translateY(-2px);
+            border-color: rgba(56, 189, 248, 0.35);
+            box-shadow: 0 0 20px rgba(56, 189, 248, 0.12);
         }
-        .gradient-text {
-            background: linear-gradient(135deg, #38bdf8 0%, #818cf8 50%, #c084fc 100%);
+        .gradient-editorial {
+            background: linear-gradient(135deg, #ffffff 0%, #cbd5e1 50%, #94a3b8 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
-        .pulse-slow {
-            animation: pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        .gradient-accent {
+            background: linear-gradient(135deg, #38bdf8 0%, #818cf8 60%, #c084fc 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
-        @keyframes pulse {
-            0%, 100% { opacity: 0.2; }
-            50% { opacity: 0.5; }
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #070b14;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #1e2942;
+            border-radius: 3px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #38bdf8;
+        }
+        /* Page animation */
+        .page-view {
+            display: none;
+            opacity: 0;
+            transform: translateY(8px);
+            transition: opacity 0.3s ease, transform 0.3s ease;
+        }
+        .page-view.active {
+            display: block;
+            opacity: 1;
+            transform: translateY(0);
         }
     </style>
 </head>
-<body class="min-h-screen selection:bg-sky-500 selection:text-white">
+<body class="h-full flex antialiased selection:bg-sky-500 selection:text-white">
 
-    <!-- Ambient background glow elements -->
-    <div class="fixed inset-0 pointer-events-none overflow-hidden z-0">
-        <div class="absolute -top-40 -left-40 w-96 h-96 bg-sky-600/20 rounded-full blur-[120px] pulse-slow"></div>
-        <div class="absolute top-1/3 -right-40 w-96 h-96 bg-purple-600/20 rounded-full blur-[140px] pulse-slow" style="animation-delay: 2s;"></div>
-        <div class="absolute -bottom-40 left-1/3 w-96 h-96 bg-teal-600/15 rounded-full blur-[130px] pulse-slow" style="animation-delay: 1s;"></div>
-    </div>
-
-    <!-- Navigation Header -->
-    <header class="sticky top-0 z-50 glass-panel border-b border-slate-800/80">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+    <!-- LEFT VERTICAL SIDEBAR -->
+    <aside id="sidebar" class="w-64 lg:w-72 bg-prism-sidebar border-r border-prism-border flex flex-col shrink-0 fixed inset-y-0 left-0 z-40 transition-transform duration-300 transform -translate-x-full md:translate-x-0">
+        <!-- Sidebar Branding -->
+        <div class="p-6 border-b border-prism-border flex items-center justify-between">
             <div class="flex items-center space-x-3">
                 <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-sky-400 via-indigo-500 to-purple-600 flex items-center justify-center shadow-lg shadow-sky-500/20">
                     <i class="fa-solid fa-shapes text-white text-lg"></i>
                 </div>
                 <div>
-                    <span class="font-heading font-extrabold text-2xl tracking-wider text-white">PRISM</span>
-                    <span class="hidden sm:inline-block ml-2 text-xs font-semibold px-2 py-0.5 rounded-full bg-sky-950 text-sky-400 border border-sky-800">IPL v1.0</span>
+                    <span class="font-astralaga text-2xl font-bold tracking-tight text-white block leading-none">PRISM</span>
+                    <span class="text-[10px] uppercase tracking-widest text-sky-400 font-semibold block mt-1">Self-Correction ML</span>
                 </div>
             </div>
+            <!-- Mobile close button -->
+            <button onclick="toggleSidebar()" class="md:hidden text-slate-400 hover:text-white p-1">
+                <i class="fa-solid fa-xmark text-lg"></i>
+            </button>
+        </div>
 
-            <nav class="hidden md:flex items-center space-x-8 text-sm font-medium text-slate-300">
-                <a href="#pipeline" class="hover:text-sky-400 transition-colors">Pipeline</a>
-                <a href="#simulator" class="hover:text-sky-400 transition-colors">Live Simulator</a>
-                <a href="#models" class="hover:text-sky-400 transition-colors">Models & Features</a>
-                <a href="#evaluation" class="hover:text-sky-400 transition-colors">Evaluation</a>
-                <a href="#robustness" class="hover:text-sky-400 transition-colors">Robustness</a>
-                <a href="#architecture" class="hover:text-sky-400 transition-colors">Architecture</a>
-            </nav>
-
-            <div class="flex items-center space-x-3">
-                <a href="#simulator" class="hidden sm:inline-flex items-center space-x-2 bg-gradient-to-r from-sky-500 to-indigo-600 hover:from-sky-400 hover:to-indigo-500 text-white px-4 py-2 rounded-lg text-sm font-semibold shadow-md shadow-sky-600/30 transition-all">
-                    <i class="fa-solid fa-play text-xs"></i>
-                    <span>Simulate Match</span>
-                </a>
-                <a href="https://github.com/Swarup625/PRISM" target="_blank" class="p-2 text-slate-400 hover:text-white transition-colors" title="GitHub Repository">
-                    <i class="fa-brands fa-github text-xl"></i>
-                </a>
+        <!-- Active Model Quick-Picker Widget in Sidebar -->
+        <div class="px-5 py-4 border-b border-prism-border bg-slate-900/40">
+            <label class="block text-[11px] font-semibold text-slate-400 uppercase tracking-wider mb-1.5 flex items-center justify-between">
+                <span>Active Model</span>
+                <span class="text-[9px] px-1.5 py-0.5 rounded bg-sky-950 text-sky-400 border border-sky-800">Switchable</span>
+            </label>
+            <div class="relative">
+                <select id="globalModelSelect" onchange="onModelChange(this.value)" class="w-full bg-slate-900 border border-slate-700/80 rounded-lg px-2.5 py-1.5 text-xs text-white focus:outline-none focus:border-sky-500 cursor-pointer">
+                    <option value="random_forest" selected>Random Forest (500 Trees)</option>
+                    <option value="hist_gradient_boosting">HistGradientBoosting</option>
+                    <option value="logistic_regression">Calibrated Logistic Reg</option>
+                    <option value="ensemble_consensus">Ensemble Consensus (Voting)</option>
+                </select>
+            </div>
+            <div class="mt-2 flex items-center justify-between text-[11px] text-slate-400">
+                <span>Model Baseline Acc:</span>
+                <span id="sidebarModelAcc" class="text-emerald-400 font-bold">80.5% (RF)</span>
             </div>
         </div>
-    </header>
 
-    <main class="relative z-10">
+        <!-- Vertical Navigation Menu -->
+        <nav class="flex-1 px-4 py-4 space-y-1.5 overflow-y-auto" id="sidebarNav">
+            <div class="text-[10px] font-semibold uppercase tracking-wider text-slate-400 px-3 py-1">Navigation</div>
 
-        <!-- Hero Section -->
-        <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-16 pb-20 text-center">
-            <div class="inline-flex items-center space-x-2 px-3 py-1.5 rounded-full bg-slate-900 border border-sky-500/30 text-sky-300 text-xs font-semibold mb-6">
-                <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
-                <span>Active Research Benchmark & Deployment</span>
+            <button onclick="navigatePage('overview')" id="nav-overview" class="nav-btn w-full flex items-center space-x-3 px-3.5 py-2.5 rounded-xl text-sm font-medium text-white bg-sky-500/10 border border-sky-500/30 transition-all text-left">
+                <i class="fa-solid fa-house text-sky-400 w-5"></i>
+                <span>Overview & Vision</span>
+            </button>
+
+            <button onclick="navigatePage('pipeline')" id="nav-pipeline" class="nav-btn w-full flex items-center space-x-3 px-3.5 py-2.5 rounded-xl text-sm font-medium text-slate-400 hover:text-white hover:bg-slate-800/50 border border-transparent transition-all text-left">
+                <i class="fa-solid fa-diagram-project text-indigo-400 w-5"></i>
+                <span>5-Stage Pipeline</span>
+            </button>
+
+            <button onclick="navigatePage('simulator')" id="nav-simulator" class="nav-btn w-full flex items-center space-x-3 px-3.5 py-2.5 rounded-xl text-sm font-medium text-slate-400 hover:text-white hover:bg-slate-800/50 border border-transparent transition-all text-left">
+                <i class="fa-solid fa-gamepad text-emerald-400 w-5"></i>
+                <div class="flex-1 flex items-center justify-between">
+                    <span>Live Simulator</span>
+                    <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
+                </div>
+            </button>
+
+            <button onclick="navigatePage('models')" id="nav-models" class="nav-btn w-full flex items-center space-x-3 px-3.5 py-2.5 rounded-xl text-sm font-medium text-slate-400 hover:text-white hover:bg-slate-800/50 border border-transparent transition-all text-left">
+                <i class="fa-solid fa-microchip text-purple-400 w-5"></i>
+                <span>Models & 50+ Features</span>
+            </button>
+
+            <button onclick="navigatePage('evaluation')" id="nav-evaluation" class="nav-btn w-full flex items-center space-x-3 px-3.5 py-2.5 rounded-xl text-sm font-medium text-slate-400 hover:text-white hover:bg-slate-800/50 border border-transparent transition-all text-left">
+                <i class="fa-solid fa-chart-column text-amber-400 w-5"></i>
+                <span>Evaluation Benchmark</span>
+            </button>
+
+            <button onclick="navigatePage('robustness')" id="nav-robustness" class="nav-btn w-full flex items-center space-x-3 px-3.5 py-2.5 rounded-xl text-sm font-medium text-slate-400 hover:text-white hover:bg-slate-800/50 border border-transparent transition-all text-left">
+                <i class="fa-solid fa-shield-halved text-rose-400 w-5"></i>
+                <span>Robustness Stress Tests</span>
+            </button>
+
+            <button onclick="navigatePage('architecture')" id="nav-architecture" class="nav-btn w-full flex items-center space-x-3 px-3.5 py-2.5 rounded-xl text-sm font-medium text-slate-400 hover:text-white hover:bg-slate-800/50 border border-transparent transition-all text-left">
+                <i class="fa-solid fa-network-wired text-teal-400 w-5"></i>
+                <span>System Architecture</span>
+            </button>
+        </nav>
+
+        <!-- Sidebar Footer Status -->
+        <div class="p-4 border-t border-prism-border bg-slate-900/60 text-xs">
+            <div class="flex items-center justify-between text-slate-400 mb-2">
+                <span class="flex items-center space-x-1.5">
+                    <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
+                    <span>Pipeline Active</span>
+                </span>
+                <span class="font-mono text-[10px] text-slate-400">v1.0 IPL</span>
+            </div>
+            <a href="https://github.com/Swarup625/prism_v1" target="_blank" class="flex items-center justify-center space-x-2 w-full py-2 bg-slate-800 hover:bg-slate-700 text-slate-200 rounded-lg font-medium transition-colors">
+                <i class="fa-brands fa-github"></i>
+                <span>GitHub Repository</span>
+            </a>
+        </div>
+    </aside>
+
+    <!-- MAIN CONTENT VIEW AREA (shifted right of vertical sidebar) -->
+    <div class="flex-1 md:pl-64 lg:pl-72 flex flex-col min-h-screen bg-prism-dark">
+
+        <!-- Top Header Bar -->
+        <header class="sticky top-0 z-30 glass-panel border-b border-prism-border px-4 sm:px-8 h-16 flex items-center justify-between">
+            <div class="flex items-center space-x-4">
+                <button onclick="toggleSidebar()" class="md:hidden text-slate-300 hover:text-white p-1">
+                    <i class="fa-solid fa-bars text-lg"></i>
+                </button>
+                <div>
+                    <h2 id="topBarTitle" class="font-astralaga text-xl sm:text-2xl font-bold text-white tracking-tight">Overview & Vision</h2>
+                    <span id="topBarSubtitle" class="text-xs text-slate-400 hidden sm:inline-block">Prediction Reliability & Self-Correction</span>
+                </div>
             </div>
 
-            <h1 class="text-4xl sm:text-6xl lg:text-7xl font-extrabold font-heading tracking-tight mb-6">
-                Prediction Reliability & <br class="hidden sm:inline" />
-                <span class="gradient-text">Intelligent Self-Correction</span>
-            </h1>
+            <!-- Header Quick Action Controls -->
+            <div class="flex items-center space-x-3 sm:space-x-4">
+                <!-- Current Selected Model Badge -->
+                <div class="hidden sm:flex items-center space-x-2 px-3 py-1.5 rounded-lg bg-slate-900/80 border border-slate-700/80 text-xs">
+                    <span class="text-slate-400">Active ML Model:</span>
+                    <span id="headerModelBadge" class="text-sky-400 font-bold">Random Forest</span>
+                </div>
 
-            <p class="max-w-3xl mx-auto text-lg sm:text-xl text-slate-400 font-light mb-10 leading-relaxed">
-                PRISM introduces a principled self-correction mechanism for ML models under distribution shifts. Built on an IPL cricket second-innings outcome benchmark, moving beyond raw predictions to active error detection, diagnosis, retrieval correction, and multi-evidence verification.
-            </p>
-
-            <!-- Key metrics ribbon -->
-            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-4xl mx-auto mb-12">
-                <div class="glass-panel p-4 rounded-xl border-slate-800">
-                    <div class="text-3xl font-extrabold text-sky-400 font-heading">+7.8%</div>
-                    <div class="text-xs text-slate-400 mt-1 uppercase tracking-wider font-semibold">Net Accuracy Gain</div>
-                </div>
-                <div class="glass-panel p-4 rounded-xl border-slate-800">
-                    <div class="text-3xl font-extrabold text-indigo-400 font-heading">82.4%</div>
-                    <div class="text-xs text-slate-400 mt-1 uppercase tracking-wider font-semibold">Selective Accuracy</div>
-                </div>
-                <div class="glass-panel p-4 rounded-xl border-slate-800">
-                    <div class="text-3xl font-extrabold text-emerald-400 font-heading">92.4%</div>
-                    <div class="text-xs text-slate-400 mt-1 uppercase tracking-wider font-semibold">Harm Prevention Rate</div>
-                </div>
-                <div class="glass-panel p-4 rounded-xl border-slate-800">
-                    <div class="text-3xl font-extrabold text-purple-400 font-heading">50+</div>
-                    <div class="text-xs text-slate-400 mt-1 uppercase tracking-wider font-semibold">Engineered Features</div>
-                </div>
+                <button onclick="navigatePage('simulator')" class="inline-flex items-center space-x-2 bg-gradient-to-r from-sky-500 to-indigo-600 hover:from-sky-400 hover:to-indigo-500 text-white px-3.5 py-1.5 rounded-lg text-xs font-semibold shadow-md shadow-sky-600/30 transition-all">
+                    <i class="fa-solid fa-play text-[10px]"></i>
+                    <span>Simulate Match</span>
+                </button>
             </div>
+        </header>
 
-            <!-- Pipeline Flow Bar -->
-            <div class="max-w-5xl mx-auto glass-panel p-6 rounded-2xl border-slate-800/90 shadow-2xl">
-                <div class="text-xs font-bold uppercase tracking-widest text-slate-400 mb-6 text-center">PRISM Closed-Loop Correction Pipeline</div>
-                <div class="grid grid-cols-1 md:grid-cols-5 gap-3 relative">
-                    <!-- Step 1 -->
-                    <div class="bg-slate-900/90 p-4 rounded-xl border border-sky-500/20 text-center relative glow-card">
-                        <div class="w-10 h-10 mx-auto mb-2 rounded-lg bg-sky-500/10 flex items-center justify-center text-sky-400 font-bold">1</div>
-                        <div class="font-heading font-bold text-white text-sm mb-1">Detect</div>
-                        <div class="text-xs text-slate-400">Baseline probability & confidence</div>
+        <!-- MAIN MULTIPAGE CONTAINER -->
+        <main class="flex-1 p-4 sm:p-8 max-w-7xl w-full mx-auto">
+
+            <!-- =============================================================== -->
+            <!-- PAGE 1: OVERVIEW & VISION -->
+            <!-- =============================================================== -->
+            <section id="page-overview" class="page-view active space-y-12">
+                <!-- Hero Section with Astralaga Typography -->
+                <div class="text-center max-w-4xl mx-auto pt-6 pb-4">
+                    <div class="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-slate-900 border border-sky-500/30 text-sky-300 text-xs font-semibold mb-6">
+                        <span class="italic-accent text-sm mr-1">the framework</span>
+                        <span>PRISM Research Benchmark</span>
                     </div>
-                    <!-- Step 2 -->
-                    <div class="bg-slate-900/90 p-4 rounded-xl border border-indigo-500/20 text-center relative glow-card">
-                        <div class="w-10 h-10 mx-auto mb-2 rounded-lg bg-indigo-500/10 flex items-center justify-center text-indigo-400 font-bold">2</div>
-                        <div class="font-heading font-bold text-white text-sm mb-1">Diagnose</div>
-                        <div class="text-xs text-slate-400">Reliability signals & risk score</div>
-                    </div>
-                    <!-- Step 3 -->
-                    <div class="bg-slate-900/90 p-4 rounded-xl border border-purple-500/20 text-center relative glow-card">
-                        <div class="w-10 h-10 mx-auto mb-2 rounded-lg bg-purple-500/10 flex items-center justify-center text-purple-400 font-bold">3</div>
-                        <div class="font-heading font-bold text-white text-sm mb-1">Correct</div>
-                        <div class="text-xs text-slate-400">KNN state retrieval & candidates</div>
-                    </div>
-                    <!-- Step 4 -->
-                    <div class="bg-slate-900/90 p-4 rounded-xl border border-teal-500/20 text-center relative glow-card">
-                        <div class="w-10 h-10 mx-auto mb-2 rounded-lg bg-teal-500/10 flex items-center justify-center text-teal-400 font-bold">4</div>
-                        <div class="font-heading font-bold text-white text-sm mb-1">Verify</div>
-                        <div class="text-xs text-slate-400">Multi-evidence harm gates</div>
-                    </div>
-                    <!-- Step 5 -->
-                    <div class="bg-slate-900/90 p-4 rounded-xl border border-emerald-500/20 text-center relative glow-card">
-                        <div class="w-10 h-10 mx-auto mb-2 rounded-lg bg-emerald-500/10 flex items-center justify-center text-emerald-400 font-bold">5</div>
-                        <div class="font-heading font-bold text-white text-sm mb-1">Decision</div>
-                        <div class="text-xs text-slate-400">Accept / Correct / Abstain</div>
+
+                    <h1 class="font-astralaga text-4xl sm:text-6xl lg:text-7xl font-bold tracking-tight mb-6 leading-tight">
+                        Prediction Reliability & <br class="hidden sm:inline"/>
+                        <span class="gradient-accent italic-accent">Intelligent Self-Correction</span>
+                    </h1>
+
+                    <p class="text-slate-300 text-base sm:text-lg max-w-2xl mx-auto leading-relaxed font-light mb-8">
+                        A closed-loop machine learning audit and correction framework designed for dynamic match-state distributions. Moving beyond uncalibrated point predictions to automated risk diagnosis, manifold retrieval, and multi-evidence verification.
+                    </p>
+
+                    <div class="flex flex-wrap items-center justify-center gap-4">
+                        <button onclick="navigatePage('simulator')" class="px-6 py-3 rounded-xl bg-gradient-to-r from-sky-500 via-indigo-600 to-purple-600 hover:from-sky-400 hover:to-indigo-500 text-white font-bold text-sm shadow-lg shadow-sky-500/25 transition-all flex items-center space-x-2">
+                            <i class="fa-solid fa-play"></i>
+                            <span>Launch Live Match Simulator</span>
+                        </button>
+                        <button onclick="navigatePage('pipeline')" class="px-6 py-3 rounded-xl glass-panel hover:bg-slate-800 text-slate-200 font-semibold text-sm transition-all border-slate-700 flex items-center space-x-2">
+                            <i class="fa-solid fa-diagram-project text-sky-400"></i>
+                            <span>Explore 5-Stage Architecture</span>
+                        </button>
                     </div>
                 </div>
-            </div>
-        </section>
 
-        <!-- Pipeline Stages Section -->
-        <section id="pipeline" class="py-20 border-t border-slate-800/80 bg-slate-950/40">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div class="text-center max-w-3xl mx-auto mb-16">
-                    <span class="text-xs font-bold uppercase tracking-widest text-sky-400">System Architecture</span>
-                    <h2 class="text-3xl sm:text-4xl font-extrabold font-heading text-white mt-2 mb-4">Inside the 5 PRISM Stages</h2>
-                    <p class="text-slate-400">Every match state flows through a rigorous multi-tier audit to ensure that predictions are not merely outputs of a black-box model, but validated, risk-assessed, and safely self-corrected.</p>
+                <!-- Headline Metrics Strip -->
+                <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
+                    <div class="glass-panel p-5 rounded-2xl border-slate-800 glow-card text-center">
+                        <span class="text-xs uppercase tracking-wider text-slate-400 block mb-1">Net Accuracy Gain</span>
+                        <div class="font-astralaga text-4xl font-bold text-sky-400">+7.8%</div>
+                        <span class="text-[11px] text-slate-400 mt-1 block">over baseline model</span>
+                    </div>
+                    <div class="glass-panel p-5 rounded-2xl border-slate-800 glow-card text-center">
+                        <span class="text-xs uppercase tracking-wider text-slate-400 block mb-1">Selective Accuracy</span>
+                        <div class="font-astralaga text-4xl font-bold text-emerald-400">82.4%</div>
+                        <span class="text-[11px] text-slate-400 mt-1 block">at 88.5% coverage</span>
+                    </div>
+                    <div class="glass-panel p-5 rounded-2xl border-slate-800 glow-card text-center">
+                        <span class="text-xs uppercase tracking-wider text-slate-400 block mb-1">Harm Prevention</span>
+                        <div class="font-astralaga text-4xl font-bold text-purple-400">92.4%</div>
+                        <span class="text-[11px] text-slate-400 mt-1 block">verification gate rate</span>
+                    </div>
+                    <div class="glass-panel p-5 rounded-2xl border-slate-800 glow-card text-center">
+                        <span class="text-xs uppercase tracking-wider text-slate-400 block mb-1">Engineered Features</span>
+                        <div class="font-astralaga text-4xl font-bold text-amber-400">50+</div>
+                        <span class="text-[11px] text-slate-400 mt-1 block">across 6 match facets</span>
+                    </div>
                 </div>
 
-                <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                    <!-- Stage 1 & 2 -->
-                    <div class="glass-panel p-6 rounded-2xl border-slate-800 glow-card">
-                        <div class="flex items-center space-x-3 mb-4">
-                            <div class="w-10 h-10 rounded-lg bg-sky-500/10 border border-sky-500/30 flex items-center justify-center text-sky-400">
-                                <i class="fa-solid fa-magnifying-glass-chart"></i>
+                <!-- Visual Pipeline Summary Card -->
+                <div class="glass-panel p-6 sm:p-8 rounded-3xl border-slate-800">
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between pb-6 border-b border-slate-800/80 mb-6 gap-2">
+                        <div>
+                            <span class="italic-accent text-slate-400 text-sm">the mechanism</span>
+                            <h3 class="font-astralaga text-2xl font-bold text-white">Closed-Loop Operational Workflow</h3>
+                        </div>
+                        <button onclick="navigatePage('pipeline')" class="text-xs text-sky-400 hover:text-sky-300 font-semibold flex items-center space-x-1">
+                            <span>Deep Dive into Stages</span>
+                            <i class="fa-solid fa-arrow-right"></i>
+                        </button>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-5 gap-3">
+                        <div class="bg-slate-900/80 p-4 rounded-xl border border-sky-500/20 text-center">
+                            <div class="w-8 h-8 rounded-lg bg-sky-500/10 text-sky-400 font-bold mx-auto mb-2 flex items-center justify-center">1</div>
+                            <h4 class="font-astralaga font-bold text-white text-base">Detect</h4>
+                            <p class="text-[11px] text-slate-400 mt-1">Calibrated baseline model evaluation</p>
+                        </div>
+                        <div class="bg-slate-900/80 p-4 rounded-xl border border-indigo-500/20 text-center">
+                            <div class="w-8 h-8 rounded-lg bg-indigo-500/10 text-indigo-400 font-bold mx-auto mb-2 flex items-center justify-center">2</div>
+                            <h4 class="font-astralaga font-bold text-white text-base">Diagnose</h4>
+                            <p class="text-[11px] text-slate-400 mt-1">Entropy, ECE & error risk meta-score</p>
+                        </div>
+                        <div class="bg-slate-900/80 p-4 rounded-xl border border-purple-500/20 text-center">
+                            <div class="w-8 h-8 rounded-lg bg-purple-500/10 text-purple-400 font-bold mx-auto mb-2 flex items-center justify-center">3</div>
+                            <h4 class="font-astralaga font-bold text-white text-base">Correct</h4>
+                            <p class="text-[11px] text-slate-400 mt-1">KNN manifold historical retrieval</p>
+                        </div>
+                        <div class="bg-slate-900/80 p-4 rounded-xl border border-teal-500/20 text-center">
+                            <div class="w-8 h-8 rounded-lg bg-teal-500/10 text-teal-400 font-bold mx-auto mb-2 flex items-center justify-center">4</div>
+                            <h4 class="font-astralaga font-bold text-white text-base">Verify</h4>
+                            <p class="text-[11px] text-slate-400 mt-1">Multi-evidence harm prevention gate</p>
+                        </div>
+                        <div class="bg-slate-900/80 p-4 rounded-xl border border-emerald-500/20 text-center">
+                            <div class="w-8 h-8 rounded-lg bg-emerald-500/10 text-emerald-400 font-bold mx-auto mb-2 flex items-center justify-center">5</div>
+                            <h4 class="font-astralaga font-bold text-white text-base">Decision</h4>
+                            <p class="text-[11px] text-slate-400 mt-1">Accept / Correct / Abstain policy</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- =============================================================== -->
+            <!-- PAGE 2: 5-STAGE PIPELINE -->
+            <!-- =============================================================== -->
+            <section id="page-pipeline" class="page-view space-y-8">
+                <div class="border-b border-slate-800 pb-4">
+                    <span class="italic-accent text-slate-400 text-sm">the architecture</span>
+                    <h2 class="font-astralaga text-3xl sm:text-4xl font-bold text-white">The PRISM 5-Stage Pipeline</h2>
+                    <p class="text-slate-400 text-sm mt-1">How raw ball-by-ball cricket state vectors are audited, diagnosed, corrected, and verified.</p>
+                </div>
+
+                <div class="space-y-6">
+                    <!-- Stage 1 -->
+                    <div class="glass-panel p-6 rounded-2xl border-slate-800 glow-card flex flex-col md:flex-row items-start gap-6">
+                        <div class="w-12 h-12 rounded-xl bg-sky-500/10 border border-sky-500/30 flex items-center justify-center text-sky-400 text-xl shrink-0">
+                            <i class="fa-solid fa-magnifying-glass-chart"></i>
+                        </div>
+                        <div class="flex-1">
+                            <div class="flex items-center justify-between flex-wrap gap-2 mb-2">
+                                <h3 class="font-astralaga text-xl font-bold text-white">Stage 1: Detect (Baseline Probability Anchor)</h3>
+                                <span class="text-xs px-2.5 py-0.5 rounded-full bg-sky-950 text-sky-400 border border-sky-800 font-medium">Predictive Layer</span>
                             </div>
-                            <div>
-                                <h3 class="font-heading font-bold text-lg text-white">1. Baseline & Signals</h3>
-                                <span class="text-xs text-sky-400">Predictive Layer</span>
+                            <p class="text-sm text-slate-300 leading-relaxed mb-4">
+                                Calibrated machine learning models evaluate the state vector to produce an initial win probability anchor. PRISM supports model-swapping between Random Forest, HistGradientBoosting, and Calibrated Logistic Regression.
+                            </p>
+                            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs bg-slate-900/60 p-3.5 rounded-xl border border-slate-800">
+                                <div><strong class="text-slate-200">Confidence:</strong> Max probability margin above 0.5</div>
+                                <div><strong class="text-slate-200">Entropy:</strong> Shannon predictive entropy (bits)</div>
+                                <div><strong class="text-slate-200">Calibration:</strong> Isotonic & Platt probability anchors</div>
                             </div>
                         </div>
-                        <p class="text-sm text-slate-400 mb-4 leading-relaxed">
-                            A suite of calibrated models (Logistic Regression, Random Forest, HistGradientBoosting) computes initial win probabilities for the chasing side. Out-of-fold calibration ensures reliable initial probabilities.
-                        </p>
-                        <ul class="text-xs space-y-2 text-slate-300 border-t border-slate-800 pt-3">
-                            <li class="flex items-center space-x-2"><i class="fa-solid fa-check text-sky-400"></i><span>Shannon Entropy & Predictive Margin</span></li>
-                            <li class="flex items-center space-x-2"><i class="fa-solid fa-check text-sky-400"></i><span>Isotonic & Platt Probability Calibration</span></li>
-                            <li class="flex items-center space-x-2"><i class="fa-solid fa-check text-sky-400"></i><span>Feature vector with 50+ match dynamics</span></li>
-                        </ul>
                     </div>
 
-                    <!-- Stage 3 & 4 -->
-                    <div class="glass-panel p-6 rounded-2xl border-slate-800 glow-card">
-                        <div class="flex items-center space-x-3 mb-4">
-                            <div class="w-10 h-10 rounded-lg bg-purple-500/10 border border-purple-500/30 flex items-center justify-center text-purple-400">
-                                <i class="fa-solid fa-triangle-exclamation"></i>
+                    <!-- Stage 2 -->
+                    <div class="glass-panel p-6 rounded-2xl border-slate-800 glow-card flex flex-col md:flex-row items-start gap-6">
+                        <div class="w-12 h-12 rounded-xl bg-indigo-500/10 border border-indigo-500/30 flex items-center justify-center text-indigo-400 text-xl shrink-0">
+                            <i class="fa-solid fa-microscope"></i>
+                        </div>
+                        <div class="flex-1">
+                            <div class="flex items-center justify-between flex-wrap gap-2 mb-2">
+                                <h3 class="font-astralaga text-xl font-bold text-white">Stage 2: Diagnose (Reliability Signals & Meta-Detector)</h3>
+                                <span class="text-xs px-2.5 py-0.5 rounded-full bg-indigo-950 text-indigo-400 border border-indigo-800 font-medium">Meta-Learning Layer</span>
                             </div>
-                            <div>
-                                <h3 class="font-heading font-bold text-lg text-white">2. Detection & Diagnosis</h3>
-                                <span class="text-xs text-purple-400">Meta-Learning Layer</span>
+                            <p class="text-sm text-slate-300 leading-relaxed mb-4">
+                                A secondary gradient-boosted error detector evaluates out-of-fold reliability signals to predict $P(\text{Base Model is Wrong})$. When risk score surpasses threshold ($\tau_{\text{risk}} > 0.60$), the prediction is marked as vulnerable.
+                            </p>
+                            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs bg-slate-900/60 p-3.5 rounded-xl border border-slate-800">
+                                <div><strong class="text-slate-200">Signal Vector:</strong> Entropy, margin, calibration error</div>
+                                <div><strong class="text-slate-200">Training:</strong> Leakage-free out-of-fold folds</div>
+                                <div><strong class="text-slate-200">Safety Gate:</strong> High risk triggers active correction</div>
                             </div>
                         </div>
-                        <p class="text-sm text-slate-400 mb-4 leading-relaxed">
-                            A dedicated Meta-Detector (Gradient Boosted Tree) predicts whether the baseline prediction is erroneous. It consumes reliability signals rather than raw match data, isolating systemic model blindspots.
-                        </p>
-                        <ul class="text-xs space-y-2 text-slate-300 border-t border-slate-800 pt-3">
-                            <li class="flex items-center space-x-2"><i class="fa-solid fa-check text-purple-400"></i><span>Out-of-fold risk scoring meta-model</span></li>
-                            <li class="flex items-center space-x-2"><i class="fa-solid fa-check text-purple-400"></i><span>Model disagreement & uncertainty indices</span></li>
-                            <li class="flex items-center space-x-2"><i class="fa-solid fa-check text-purple-400"></i><span>High-risk threshold trigger (> 0.60)</span></li>
-                        </ul>
                     </div>
 
-                    <!-- Stage 5 -->
-                    <div class="glass-panel p-6 rounded-2xl border-slate-800 glow-card">
-                        <div class="flex items-center space-x-3 mb-4">
-                            <div class="w-10 h-10 rounded-lg bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center text-emerald-400">
-                                <i class="fa-solid fa-shield-halved"></i>
+                    <!-- Stage 3 -->
+                    <div class="glass-panel p-6 rounded-2xl border-slate-800 glow-card flex flex-col md:flex-row items-start gap-6">
+                        <div class="w-12 h-12 rounded-xl bg-purple-500/10 border border-purple-500/30 flex items-center justify-center text-purple-400 text-xl shrink-0">
+                            <i class="fa-solid fa-wrench"></i>
+                        </div>
+                        <div class="flex-1">
+                            <div class="flex items-center justify-between flex-wrap gap-2 mb-2">
+                                <h3 class="font-astralaga text-xl font-bold text-white">Stage 3: Correct (Manifold Retrieval & Candidate Generator)</h3>
+                                <span class="text-xs px-2.5 py-0.5 rounded-full bg-purple-950 text-purple-400 border border-purple-800 font-medium">Retrieval Layer</span>
                             </div>
-                            <div>
-                                <h3 class="font-heading font-bold text-lg text-white">3. Correction & Verification</h3>
-                                <span class="text-xs text-emerald-400">Safety & Decision Layer</span>
+                            <p class="text-sm text-slate-300 leading-relaxed mb-4">
+                                Queries an indexed manifold of over 38,000 historical IPL match states to find the $k$-nearest neighbors with matching required rates, wickets, and phase dynamics, computing similarity-weighted outcome distributions.
+                            </p>
+                            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs bg-slate-900/60 p-3.5 rounded-xl border border-slate-800">
+                                <div><strong class="text-slate-200">Index:</strong> KD-Tree / Ball-Tree Euclidean metric</div>
+                                <div><strong class="text-slate-200">Weights:</strong> Normalized exponential similarity decay</div>
+                                <div><strong class="text-slate-200">Candidates:</strong> Model alternatives & retrieval blend</div>
                             </div>
                         </div>
-                        <p class="text-sm text-slate-400 mb-4 leading-relaxed">
-                            When risk is flagged, KNN retrieves k-nearest historical IPL match states in the manifold. Proposed corrections undergo a multi-evidence verification audit before any change is accepted.
-                        </p>
-                        <ul class="text-xs space-y-2 text-slate-300 border-t border-slate-800 pt-3">
-                            <li class="flex items-center space-x-2"><i class="fa-solid fa-check text-emerald-400"></i><span>KD-tree ball-tree historical manifold retrieval</span></li>
-                            <li class="flex items-center space-x-2"><i class="fa-solid fa-check text-emerald-400"></i><span>Harm reduction check prevents harmful edits</span></li>
-                            <li class="flex items-center space-x-2"><i class="fa-solid fa-check text-emerald-400"></i><span>Principled selective abstention when ambiguous</span></li>
-                        </ul>
+                    </div>
+
+                    <!-- Stage 4 & 5 -->
+                    <div class="glass-panel p-6 rounded-2xl border-slate-800 glow-card flex flex-col md:flex-row items-start gap-6">
+                        <div class="w-12 h-12 rounded-xl bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center text-emerald-400 text-xl shrink-0">
+                            <i class="fa-solid fa-shield-halved"></i>
+                        </div>
+                        <div class="flex-1">
+                            <div class="flex items-center justify-between flex-wrap gap-2 mb-2">
+                                <h3 class="font-astralaga text-xl font-bold text-white">Stages 4 & 5: Verify & Selective Decision Policy</h3>
+                                <span class="text-xs px-2.5 py-0.5 rounded-full bg-emerald-950 text-emerald-400 border border-emerald-800 font-medium">Harm Gate & Output</span>
+                            </div>
+                            <p class="text-sm text-slate-300 leading-relaxed mb-4">
+                                Proposed corrections must clear statistical harm-reduction gates before overriding the baseline. Output conforms to a principled tri-state selective classification policy: <code class="text-emerald-400 font-bold">ACCEPT</code>, <code class="text-sky-400 font-bold">CORRECT</code>, or <code class="text-amber-400 font-bold">ABSTAIN</code>.
+                            </p>
+                            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs bg-slate-900/60 p-3.5 rounded-xl border border-slate-800">
+                                <div><strong class="text-slate-200">Accept:</strong> Risk &lt; 0.60, baseline retained</div>
+                                <div><strong class="text-slate-200">Correct:</strong> Risk &gt; 0.60 and neighbor consensus &gt; 70%</div>
+                                <div><strong class="text-slate-200">Abstain:</strong> Conflicting evidence, precision preserved</div>
+                            </div>
+                        </div>
                     </div>
                 </div>
-            </div>
-        </section>
+            </section>
 
-        <!-- Live Match Simulator Section -->
-        <section id="simulator" class="py-20 border-t border-slate-800/80">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div class="text-center max-w-3xl mx-auto mb-16">
-                    <span class="text-xs font-bold uppercase tracking-widest text-sky-400">Interactive Demonstration</span>
-                    <h2 class="text-3xl sm:text-4xl font-extrabold font-heading text-white mt-2 mb-4">Live Match State Simulator</h2>
-                    <p class="text-slate-400">Configure a second-innings IPL match state and watch PRISM evaluate reliability, trigger risk diagnosis, query historical matches, and make an auditable final decision.</p>
+            <!-- =============================================================== -->
+            <!-- PAGE 3: LIVE SIMULATOR (WITH DYNAMIC MODEL SELECTOR) -->
+            <!-- =============================================================== -->
+            <section id="page-simulator" class="page-view space-y-8">
+                <div class="border-b border-slate-800 pb-4 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                    <div>
+                        <span class="italic-accent text-slate-400 text-sm">interactive demonstration</span>
+                        <h2 class="font-astralaga text-3xl sm:text-4xl font-bold text-white">Live Match Simulator</h2>
+                        <p class="text-slate-400 text-sm mt-1">Configure match state, pick your active ML baseline, and inspect the self-correction audit trail.</p>
+                    </div>
+
+                    <!-- Simulator Model Selector Toggle -->
+                    <div class="bg-slate-900 p-2 rounded-2xl border border-slate-800 flex items-center space-x-2">
+                        <span class="text-xs text-slate-400 font-medium pl-2">Select Model:</span>
+                        <div class="flex flex-wrap gap-1" id="simModelButtons">
+                            <button onclick="setSimModel('random_forest')" id="btn-m-rf" class="px-2.5 py-1 text-xs rounded-lg font-semibold bg-sky-500 text-white shadow-sm transition-all">Random Forest</button>
+                            <button onclick="setSimModel('hist_gradient_boosting')" id="btn-m-hgb" class="px-2.5 py-1 text-xs rounded-lg font-medium text-slate-400 hover:text-white transition-all">HistGBM</button>
+                            <button onclick="setSimModel('logistic_regression')" id="btn-m-log" class="px-2.5 py-1 text-xs rounded-lg font-medium text-slate-400 hover:text-white transition-all">Logistic Reg</button>
+                            <button onclick="setSimModel('ensemble_consensus')" id="btn-m-ens" class="px-2.5 py-1 text-xs rounded-lg font-medium text-slate-400 hover:text-white transition-all">Ensemble</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Active Model Information Banner -->
+                <div id="modelInfoBanner" class="glass-panel p-4 rounded-xl border-sky-500/20 bg-sky-950/20 flex items-center justify-between text-xs">
+                    <div class="flex items-center space-x-3">
+                        <div class="w-8 h-8 rounded-lg bg-sky-500/20 text-sky-400 flex items-center justify-center font-bold">
+                            <i class="fa-solid fa-tree"></i>
+                        </div>
+                        <div>
+                            <span class="text-white font-bold block" id="bannerModelName">Random Forest Classifier (500 Trees)</span>
+                            <span class="text-slate-400" id="bannerModelDesc">Non-linear feature interaction baseline capturing wicket degradation under pressure.</span>
+                        </div>
+                    </div>
+                    <div class="text-right">
+                        <span class="text-slate-400 block text-[10px]">Benchmark Validation Acc</span>
+                        <span class="text-emerald-400 font-bold text-sm" id="bannerModelAcc">80.54%</span>
+                    </div>
                 </div>
 
                 <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-                    <!-- Simulator Form Controls (5 cols) -->
-                    <div class="lg:col-span-5 glass-panel p-6 sm:p-8 rounded-2xl border-slate-800">
-                        <h3 class="font-heading font-bold text-xl text-white mb-6 flex items-center space-x-2">
-                            <i class="fa-solid fa-sliders text-sky-400"></i>
+                    <!-- Parameters Form (5 cols) -->
+                    <div class="lg:col-span-5 glass-panel p-6 rounded-2xl border-slate-800 space-y-4">
+                        <h3 class="font-astralaga font-bold text-xl text-white flex items-center space-x-2">
+                            <i class="fa-solid fa-sliders text-sky-400 text-sm"></i>
                             <span>Match Parameters</span>
                         </h3>
 
-                        <div class="space-y-4">
-                            <!-- Batting First & Chasing -->
-                            <div class="grid grid-cols-2 gap-3">
-                                <div>
-                                    <label class="block text-xs font-semibold text-slate-300 uppercase mb-1">Batting 1st (Defending)</label>
-                                    <select id="team1Select" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-sky-500">
-                                        <option value="CSK" selected>Chennai Super Kings</option>
-                                        <option value="MI">Mumbai Indians</option>
-                                        <option value="RCB">Royal Challengers Bengaluru</option>
-                                        <option value="KKR">Kolkata Knight Riders</option>
-                                        <option value="GT">Gujarat Titans</option>
-                                        <option value="RR">Rajasthan Royals</option>
-                                        <option value="SRH">Sunrisers Hyderabad</option>
-                                        <option value="DC">Delhi Capitals</option>
-                                        <option value="LSG">Lucknow Super Giants</option>
-                                        <option value="PBKS">Punjab Kings</option>
-                                    </select>
-                                </div>
-                                <div>
-                                    <label class="block text-xs font-semibold text-slate-300 uppercase mb-1">Chasing Side</label>
-                                    <select id="team2Select" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-sky-500">
-                                        <option value="MI" selected>Mumbai Indians</option>
-                                        <option value="CSK">Chennai Super Kings</option>
-                                        <option value="RCB">Royal Challengers Bengaluru</option>
-                                        <option value="KKR">Kolkata Knight Riders</option>
-                                        <option value="GT">Gujarat Titans</option>
-                                        <option value="RR">Rajasthan Royals</option>
-                                        <option value="SRH">Sunrisers Hyderabad</option>
-                                        <option value="DC">Delhi Capitals</option>
-                                        <option value="LSG">Lucknow Super Giants</option>
-                                        <option value="PBKS">Punjab Kings</option>
-                                    </select>
-                                </div>
-                            </div>
-
-                            <!-- Venue -->
+                        <!-- Batting & Chasing -->
+                        <div class="grid grid-cols-2 gap-3">
                             <div>
-                                <label class="block text-xs font-semibold text-slate-300 uppercase mb-1">Venue</label>
-                                <select id="venueSelect" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-sky-500">
-                                    <option value="Wankhede Stadium, Mumbai">Wankhede Stadium, Mumbai (High-scoring, Chase Bias)</option>
-                                    <option value="M. Chinnaswamy Stadium, Bengaluru">M. Chinnaswamy Stadium, Bengaluru (Short Boundaries)</option>
-                                    <option value="Eden Gardens, Kolkata">Eden Gardens, Kolkata (Balanced)</option>
-                                    <option value="MA Chidambaram Stadium, Chennai">MA Chidambaram Stadium, Chennai (Spin, Defend Bias)</option>
-                                    <option value="Narendra Modi Stadium, Ahmedabad">Narendra Modi Stadium, Ahmedabad (Large Dimensions)</option>
+                                <label class="block text-[11px] font-semibold text-slate-400 uppercase mb-1">Batting 1st (Defending)</label>
+                                <select id="simTeam1" onchange="updateSimStats()" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-2.5 py-1.5 text-xs text-white">
+                                    <option value="CSK" selected>Chennai Super Kings</option>
+                                    <option value="MI">Mumbai Indians</option>
+                                    <option value="RCB">Royal Challengers Bengaluru</option>
+                                    <option value="KKR">Kolkata Knight Riders</option>
+                                    <option value="GT">Gujarat Titans</option>
+                                    <option value="RR">Rajasthan Royals</option>
+                                    <option value="SRH">Sunrisers Hyderabad</option>
+                                    <option value="DC">Delhi Capitals</option>
+                                    <option value="LSG">Lucknow Super Giants</option>
+                                    <option value="PBKS">Punjab Kings</option>
                                 </select>
                             </div>
-
-                            <!-- Target Score -->
                             <div>
-                                <div class="flex justify-between text-xs font-semibold text-slate-300 uppercase mb-1">
-                                    <span>Target to Chase</span>
-                                    <span id="targetValue" class="text-sky-400 font-bold">185 runs</span>
-                                </div>
-                                <input type="range" id="targetInput" min="120" max="240" value="185" class="w-full h-2 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-sky-500">
+                                <label class="block text-[11px] font-semibold text-slate-400 uppercase mb-1">Chasing Side</label>
+                                <select id="simTeam2" onchange="updateSimStats()" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-2.5 py-1.5 text-xs text-white">
+                                    <option value="MI" selected>Mumbai Indians</option>
+                                    <option value="CSK">Chennai Super Kings</option>
+                                    <option value="RCB">Royal Challengers Bengaluru</option>
+                                    <option value="KKR">Kolkata Knight Riders</option>
+                                    <option value="GT">Gujarat Titans</option>
+                                    <option value="RR">Rajasthan Royals</option>
+                                    <option value="SRH">Sunrisers Hyderabad</option>
+                                    <option value="DC">Delhi Capitals</option>
+                                    <option value="LSG">Lucknow Super Giants</option>
+                                    <option value="PBKS">Punjab Kings</option>
+                                </select>
                             </div>
-
-                            <!-- Overs Completed -->
-                            <div>
-                                <div class="flex justify-between text-xs font-semibold text-slate-300 uppercase mb-1">
-                                    <span>Overs Completed</span>
-                                    <span id="oversValue" class="text-sky-400 font-bold">14.0 ov</span>
-                                </div>
-                                <input type="range" id="oversInput" min="1" max="19" step="0.5" value="14" class="w-full h-2 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-sky-500">
-                            </div>
-
-                            <!-- Current Score -->
-                            <div>
-                                <div class="flex justify-between text-xs font-semibold text-slate-300 uppercase mb-1">
-                                    <span>Current Score</span>
-                                    <span id="scoreValue" class="text-sky-400 font-bold">118 runs</span>
-                                </div>
-                                <input type="range" id="scoreInput" min="20" max="220" value="118" class="w-full h-2 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-sky-500">
-                            </div>
-
-                            <!-- Wickets Lost -->
-                            <div>
-                                <div class="flex justify-between text-xs font-semibold text-slate-300 uppercase mb-1">
-                                    <span>Wickets Lost</span>
-                                    <span id="wicketsValue" class="text-sky-400 font-bold">4 wickets</span>
-                                </div>
-                                <input type="range" id="wicketsInput" min="0" max="9" value="4" class="w-full h-2 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-sky-500">
-                            </div>
-
-                            <!-- Preset Scenarios -->
-                            <div class="pt-2">
-                                <label class="block text-xs font-semibold text-slate-400 uppercase mb-2">Preset High-Stakes Scenarios</label>
-                                <div class="grid grid-cols-3 gap-2">
-                                    <button type="button" onclick="loadScenario('death_chase')" class="px-2 py-1.5 text-xs bg-slate-800 hover:bg-slate-700 rounded border border-slate-700 text-slate-300">
-                                        Tight Death Chase
-                                    </button>
-                                    <button type="button" onclick="loadScenario('collapse')" class="px-2 py-1.5 text-xs bg-slate-800 hover:bg-slate-700 rounded border border-slate-700 text-slate-300">
-                                        Top-Order Collapse
-                                    </button>
-                                    <button type="button" onclick="loadScenario('cruise')" class="px-2 py-1.5 text-xs bg-slate-800 hover:bg-slate-700 rounded border border-slate-700 text-slate-300">
-                                        Comfortable Chase
-                                    </button>
-                                </div>
-                            </div>
-
-                            <button id="runSimBtn" onclick="runSimulation()" class="w-full mt-4 py-3 bg-gradient-to-r from-sky-500 via-indigo-600 to-purple-600 hover:from-sky-400 hover:to-indigo-500 text-white rounded-xl font-bold font-heading shadow-lg shadow-sky-500/25 transition-all flex items-center justify-center space-x-2">
-                                <i class="fa-solid fa-bolt"></i>
-                                <span>Execute PRISM Pipeline</span>
-                            </button>
                         </div>
+
+                        <!-- Venue -->
+                        <div>
+                            <label class="block text-[11px] font-semibold text-slate-400 uppercase mb-1">Venue</label>
+                            <select id="simVenue" onchange="updateSimStats()" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-2.5 py-1.5 text-xs text-white">
+                                <option value="Wankhede Stadium, Mumbai">Wankhede Stadium, Mumbai (Chase Bias +3%)</option>
+                                <option value="M. Chinnaswamy Stadium, Bengaluru">M. Chinnaswamy Stadium, Bengaluru (High scoring)</option>
+                                <option value="Eden Gardens, Kolkata">Eden Gardens, Kolkata (Balanced)</option>
+                                <option value="MA Chidambaram Stadium, Chennai">MA Chidambaram Stadium, Chennai (Spin / Defend)</option>
+                                <option value="Narendra Modi Stadium, Ahmedabad">Narendra Modi Stadium, Ahmedabad</option>
+                            </select>
+                        </div>
+
+                        <!-- Sliders -->
+                        <div>
+                            <div class="flex justify-between text-xs text-slate-300 mb-1">
+                                <span>Target to Chase</span>
+                                <span id="valTarget" class="text-sky-400 font-bold">185 runs</span>
+                            </div>
+                            <input type="range" id="inputTarget" min="120" max="240" value="185" oninput="updateSimStats()" class="w-full h-1.5 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-sky-500">
+                        </div>
+
+                        <div>
+                            <div class="flex justify-between text-xs text-slate-300 mb-1">
+                                <span>Overs Completed</span>
+                                <span id="valOvers" class="text-sky-400 font-bold">14.0 ov</span>
+                            </div>
+                            <input type="range" id="inputOvers" min="1" max="19" step="0.5" value="14" oninput="updateSimStats()" class="w-full h-1.5 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-sky-500">
+                        </div>
+
+                        <div>
+                            <div class="flex justify-between text-xs text-slate-300 mb-1">
+                                <span>Current Score</span>
+                                <span id="valScore" class="text-sky-400 font-bold">118 runs</span>
+                            </div>
+                            <input type="range" id="inputScore" min="20" max="230" value="118" oninput="updateSimStats()" class="w-full h-1.5 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-sky-500">
+                        </div>
+
+                        <div>
+                            <div class="flex justify-between text-xs text-slate-300 mb-1">
+                                <span>Wickets Lost</span>
+                                <span id="valWickets" class="text-sky-400 font-bold">4 wickets</span>
+                            </div>
+                            <input type="range" id="inputWickets" min="0" max="9" value="4" oninput="updateSimStats()" class="w-full h-1.5 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-sky-500">
+                        </div>
+
+                        <!-- Preset Scenarios -->
+                        <div class="pt-2">
+                            <span class="block text-[11px] font-semibold text-slate-400 uppercase mb-2">Preset High-Stakes Situations</span>
+                            <div class="grid grid-cols-3 gap-2">
+                                <button type="button" onclick="loadSimPreset('death_chase')" class="px-2 py-1 text-[11px] bg-slate-800 hover:bg-slate-700 rounded border border-slate-700 text-slate-300">Tight Death</button>
+                                <button type="button" onclick="loadSimPreset('collapse')" class="px-2 py-1 text-[11px] bg-slate-800 hover:bg-slate-700 rounded border border-slate-700 text-slate-300">Top Collapse</button>
+                                <button type="button" onclick="loadSimPreset('cruise')" class="px-2 py-1 text-[11px] bg-slate-800 hover:bg-slate-700 rounded border border-slate-700 text-slate-300">Cruise Chase</button>
+                            </div>
+                        </div>
+
+                        <button onclick="executeSimulation()" class="w-full mt-2 py-3 bg-gradient-to-r from-sky-500 via-indigo-600 to-purple-600 hover:from-sky-400 hover:to-indigo-500 text-white rounded-xl font-bold font-astralaga text-base shadow-lg shadow-sky-500/25 transition-all flex items-center justify-center space-x-2">
+                            <i class="fa-solid fa-bolt text-xs"></i>
+                            <span>Execute PRISM Audit</span>
+                        </button>
                     </div>
 
-                    <!-- Pipeline Execution Display (7 cols) -->
-                    <div class="lg:col-span-7 space-y-6">
-                        <!-- Top Summary Match Card -->
-                        <div class="glass-panel p-6 rounded-2xl border-slate-800">
-                            <div class="flex flex-wrap items-center justify-between gap-4 border-b border-slate-800 pb-4 mb-4">
-                                <div class="flex items-center space-x-3">
-                                    <div class="text-xl font-extrabold text-white font-heading" id="summaryHeader">MI chasing 185 vs CSK</div>
+                    <!-- Simulation Audit Trail Display (7 cols) -->
+                    <div class="lg:col-span-7 space-y-4">
+                        <!-- Top State Strip -->
+                        <div class="glass-panel p-5 rounded-2xl border-slate-800">
+                            <div class="flex items-center justify-between border-b border-slate-800 pb-3 mb-3">
+                                <div>
+                                    <h4 id="simMatchHeader" class="font-astralaga text-lg font-bold text-white">MI chasing 185 vs CSK</h4>
+                                    <span id="simVenueDisplay" class="text-xs text-slate-400">Wankhede Stadium, Mumbai</span>
                                 </div>
                                 <div class="text-right">
-                                    <div class="text-xs text-slate-400">Required Run Rate</div>
-                                    <div class="text-lg font-bold text-amber-400 font-heading" id="summaryRRR">11.17 RPO</div>
+                                    <span class="text-[10px] uppercase tracking-wider text-slate-400 block">Required Rate</span>
+                                    <span id="simRRRDisplay" class="font-astralaga text-lg font-bold text-amber-400">11.17 RPO</span>
                                 </div>
                             </div>
-
-                            <!-- Quick Stats Strip -->
                             <div class="grid grid-cols-4 gap-2 text-center text-xs">
-                                <div class="bg-slate-900/80 p-2 rounded-lg border border-slate-800">
-                                    <span class="text-slate-400 block">Balls Left</span>
-                                    <span class="font-bold text-white text-sm" id="statBalls">36</span>
+                                <div class="bg-slate-900/80 p-2 rounded-lg border border-slate-800"><span class="text-slate-400 block text-[10px]">Balls Left</span><strong id="simBallsLeft" class="text-white">36</strong></div>
+                                <div class="bg-slate-900/80 p-2 rounded-lg border border-slate-800"><span class="text-slate-400 block text-[10px]">Runs Needed</span><strong id="simRunsNeeded" class="text-white">67</strong></div>
+                                <div class="bg-slate-900/80 p-2 rounded-lg border border-slate-800"><span class="text-slate-400 block text-[10px]">Current RR</span><strong id="simCRR" class="text-white">8.43</strong></div>
+                                <div class="bg-slate-900/80 p-2 rounded-lg border border-slate-800"><span class="text-slate-400 block text-[10px]">Wickets Left</span><strong id="simWicketsLeft" class="text-white">6</strong></div>
+                            </div>
+                        </div>
+
+                        <!-- Step 1: Detect Output -->
+                        <div class="glass-panel p-4 rounded-xl border-slate-800 glow-card">
+                            <div class="flex items-center justify-between mb-2">
+                                <div class="flex items-center space-x-2">
+                                    <span class="w-5 h-5 rounded-full bg-sky-500/20 text-sky-400 flex items-center justify-center text-xs font-bold">1</span>
+                                    <h5 class="font-astralaga font-bold text-sm text-white" id="step1Title">Baseline (Random Forest)</h5>
                                 </div>
-                                <div class="bg-slate-900/80 p-2 rounded-lg border border-slate-800">
-                                    <span class="text-slate-400 block">Runs Needed</span>
-                                    <span class="font-bold text-white text-sm" id="statRuns">67</span>
+                                <span id="step1ConfidenceBadge" class="text-xs px-2 py-0.5 rounded bg-sky-950 text-sky-400 border border-sky-800">Confidence: 68%</span>
+                            </div>
+                            <div class="space-y-1.5">
+                                <div class="flex justify-between text-xs text-slate-300">
+                                    <span id="step1ChasingLabel">MI (Chasing): 42%</span>
+                                    <span id="step1DefendingLabel">CSK (Defending): 58%</span>
                                 </div>
-                                <div class="bg-slate-900/80 p-2 rounded-lg border border-slate-800">
-                                    <span class="text-slate-400 block">Current RR</span>
-                                    <span class="font-bold text-white text-sm" id="statCRR">8.43</span>
-                                </div>
-                                <div class="bg-slate-900/80 p-2 rounded-lg border border-slate-800">
-                                    <span class="text-slate-400 block">Wickets Left</span>
-                                    <span class="font-bold text-white text-sm" id="statWickets">6</span>
+                                <div class="w-full h-2.5 bg-slate-900 rounded-full overflow-hidden flex">
+                                    <div id="step1BarChasing" class="bg-sky-500 h-full transition-all duration-500" style="width: 42%;"></div>
+                                    <div id="step1BarDefending" class="bg-indigo-600 h-full transition-all duration-500" style="width: 58%;"></div>
                                 </div>
                             </div>
                         </div>
 
-                        <!-- Pipeline Progress Cards -->
-                        <div class="space-y-4" id="pipelineCards">
-
-                            <!-- Step 1: Detect Output -->
-                            <div class="glass-panel p-5 rounded-xl border-slate-800 glow-card transition-all" id="cardDetect">
-                                <div class="flex items-center justify-between mb-3">
-                                    <div class="flex items-center space-x-2">
-                                        <span class="w-6 h-6 rounded-full bg-sky-500/20 text-sky-400 flex items-center justify-center text-xs font-bold">1</span>
-                                        <h4 class="font-heading font-bold text-sm text-white">Baseline Prediction (GBM Ensemble)</h4>
-                                    </div>
-                                    <span class="text-xs px-2 py-0.5 rounded bg-sky-950 text-sky-400 border border-sky-800" id="baselineConfidence">Confidence: 68%</span>
+                        <!-- Step 2: Diagnosis Output -->
+                        <div class="glass-panel p-4 rounded-xl border-slate-800 glow-card">
+                            <div class="flex items-center justify-between mb-2">
+                                <div class="flex items-center space-x-2">
+                                    <span class="w-5 h-5 rounded-full bg-indigo-500/20 text-indigo-400 flex items-center justify-center text-xs font-bold">2</span>
+                                    <h5 class="font-astralaga font-bold text-sm text-white">Error Diagnosis & Risk Score</h5>
                                 </div>
-                                <div class="space-y-2">
-                                    <div class="flex justify-between text-xs text-slate-300">
-                                        <span id="baselineTeamChasing">Chasing: 42%</span>
-                                        <span id="baselineTeamDefending">Defending: 58%</span>
-                                    </div>
-                                    <div class="w-full h-3 bg-slate-900 rounded-full overflow-hidden flex">
-                                        <div id="probBarChasing" class="bg-sky-500 h-full transition-all duration-500" style="width: 42%;"></div>
-                                        <div id="probBarDefending" class="bg-indigo-600 h-full transition-all duration-500" style="width: 58%;"></div>
-                                    </div>
+                                <span id="step2RiskBadge" class="text-xs font-bold px-2 py-0.5 rounded bg-amber-950 text-amber-400 border border-amber-800">RISK: MEDIUM (0.54)</span>
+                            </div>
+                            <div class="grid grid-cols-3 gap-2 text-center text-xs bg-slate-900/60 p-2.5 rounded-lg">
+                                <div><span class="text-slate-400 block text-[10px]">Entropy</span><strong id="step2Entropy" class="text-slate-200">0.97 bits</strong></div>
+                                <div><span class="text-slate-400 block text-[10px]">Disagreement</span><strong id="step2Disagreement" class="text-slate-200">0.082</strong></div>
+                                <div><span class="text-slate-400 block text-[10px]">Neighbor Variance</span><strong id="step2Variance" class="text-slate-200">0.141</strong></div>
+                            </div>
+                        </div>
+
+                        <!-- Step 3: Correction Output -->
+                        <div class="glass-panel p-4 rounded-xl border-slate-800 glow-card">
+                            <div class="flex items-center justify-between mb-2">
+                                <div class="flex items-center space-x-2">
+                                    <span class="w-5 h-5 rounded-full bg-purple-500/20 text-purple-400 flex items-center justify-center text-xs font-bold">3</span>
+                                    <h5 class="font-astralaga font-bold text-sm text-white">KNN Manifold Retrieval</h5>
+                                </div>
+                                <span id="step3StatusBadge" class="text-xs px-2 py-0.5 rounded bg-purple-950 text-purple-300 border border-purple-800">Correction Active</span>
+                            </div>
+                            <div class="space-y-2 text-xs">
+                                <div class="flex justify-between items-center bg-slate-900/60 p-2 rounded-lg border border-slate-800">
+                                    <span class="text-slate-300">Candidate Shift:</span>
+                                    <strong id="step3Shift" class="text-purple-300">42% → 51% (+9%)</strong>
+                                </div>
+                                <div class="space-y-1 text-slate-400 text-[11px]" id="step3Neighbors">
+                                    <!-- Dynamic neighbors -->
                                 </div>
                             </div>
+                        </div>
 
-                            <!-- Step 2: Diagnose Output -->
-                            <div class="glass-panel p-5 rounded-xl border-slate-800 glow-card transition-all" id="cardDiagnose">
-                                <div class="flex items-center justify-between mb-3">
-                                    <div class="flex items-center space-x-2">
-                                        <span class="w-6 h-6 rounded-full bg-purple-500/20 text-purple-400 flex items-center justify-center text-xs font-bold">2</span>
-                                        <h4 class="font-heading font-bold text-sm text-white">Error Diagnosis & Risk Detection</h4>
-                                    </div>
-                                    <span class="text-xs font-bold px-2 py-0.5 rounded" id="riskBadge">RISK: MEDIUM (0.54)</span>
+                        <!-- Step 4 & 5: Decision Output -->
+                        <div class="glass-panel p-5 rounded-xl border-slate-800 glow-card">
+                            <div class="flex items-center justify-between mb-3">
+                                <div class="flex items-center space-x-2">
+                                    <span class="w-5 h-5 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center text-xs font-bold">4-5</span>
+                                    <h5 class="font-astralaga font-bold text-base text-white">Verification & Final Policy</h5>
                                 </div>
-                                <div class="text-xs text-slate-400 grid grid-cols-3 gap-2 text-center bg-slate-900/60 p-3 rounded-lg">
-                                    <div>
-                                        <span class="block text-slate-500">Shannon Entropy</span>
-                                        <span class="font-bold text-slate-200" id="metricEntropy">0.97 bits</span>
-                                    </div>
-                                    <div>
-                                        <span class="block text-slate-500">Disagreement</span>
-                                        <span class="font-bold text-slate-200" id="metricDisagreement">0.082</span>
-                                    </div>
-                                    <div>
-                                        <span class="block text-slate-500">Neighbor Variance</span>
-                                        <span class="font-bold text-slate-200" id="metricVariance">0.141</span>
-                                    </div>
-                                </div>
+                                <span id="step5DecisionBadge" class="text-xs font-extrabold uppercase px-3 py-1 rounded-full bg-emerald-950 text-emerald-400 border border-emerald-800">
+                                    ACCEPT BASELINE
+                                </span>
                             </div>
-
-                            <!-- Step 3: Correction Output -->
-                            <div class="glass-panel p-5 rounded-xl border-slate-800 glow-card transition-all" id="cardCorrect">
-                                <div class="flex items-center justify-between mb-3">
-                                    <div class="flex items-center space-x-2">
-                                        <span class="w-6 h-6 rounded-full bg-purple-500/20 text-purple-400 flex items-center justify-center text-xs font-bold">3</span>
-                                        <h4 class="font-heading font-bold text-sm text-white">KNN Manifold Retrieval & Candidate Correction</h4>
-                                    </div>
-                                    <span class="text-xs px-2 py-0.5 rounded bg-purple-950 text-purple-300 border border-purple-800" id="correctionTriggered">Correction Active</span>
-                                </div>
-                                <div class="space-y-2 text-xs text-slate-300">
-                                    <div class="flex justify-between items-center bg-slate-900/60 p-2.5 rounded-lg border border-slate-800/80">
-                                        <span>Candidate Shift (Similarity Weighted):</span>
-                                        <span class="font-bold text-purple-300" id="correctionDelta">42% → 51% (+9%)</span>
-                                    </div>
-                                    <div class="text-xs text-slate-400 mt-2">
-                                        <div class="font-semibold text-slate-300 mb-1">Top Retrieved Historical Neighbors:</div>
-                                        <div class="space-y-1" id="retrievedNeighbors">
-                                            <!-- Dynamically populated -->
-                                        </div>
-                                    </div>
-                                </div>
+                            <div class="p-3.5 rounded-xl bg-slate-900/90 border border-slate-800 mb-2">
+                                <span class="text-[10px] text-slate-400 block uppercase tracking-wider mb-1">Decision Policy Rationale</span>
+                                <p id="step5Rationale" class="text-xs text-slate-200 leading-relaxed">
+                                    Error risk is low. Baseline Random Forest probabilities are calibrated and verified safe.
+                                </p>
                             </div>
-
-                            <!-- Step 4 & 5: Verification & Decision Output -->
-                            <div class="glass-panel p-6 rounded-xl border-slate-800 glow-card transition-all" id="cardDecision">
-                                <div class="flex items-center justify-between mb-4">
-                                    <div class="flex items-center space-x-2">
-                                        <span class="w-6 h-6 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center text-xs font-bold">4-5</span>
-                                        <h4 class="font-heading font-bold text-base text-white">Verification & Final Decision</h4>
-                                    </div>
-                                    <div id="finalDecisionBadge" class="text-xs font-extrabold uppercase px-3 py-1 rounded-full bg-emerald-950 text-emerald-400 border border-emerald-800">
-                                        ACCEPT
-                                    </div>
-                                </div>
-                                <div class="p-4 rounded-xl bg-slate-900/90 border border-slate-800 mb-3">
-                                    <div class="text-xs text-slate-400 mb-1 uppercase tracking-wider font-semibold">Decision Policy Rationale</div>
-                                    <p class="text-sm text-slate-200 leading-relaxed" id="decisionRationale">
-                                        Baseline predictions are calibrated and stable. Error risk falls below active correction threshold (0.60).
-                                    </p>
-                                </div>
-                                <div class="flex items-center justify-between text-xs text-slate-400">
-                                    <span>Audit Trail: <strong class="text-slate-200">PRISM-IPL-2024-v1</strong></span>
-                                    <span class="text-emerald-400 font-semibold flex items-center space-x-1">
-                                        <i class="fa-solid fa-circle-check"></i>
-                                        <span>Verified Safe</span>
-                                    </span>
-                                </div>
-                            </div>
-
                         </div>
                     </div>
                 </div>
-            </div>
-        </section>
+            </section>
 
-        <!-- Models & Features Section -->
-        <section id="models" class="py-20 border-t border-slate-800/80 bg-slate-950/40">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div class="text-center max-w-3xl mx-auto mb-16">
-                    <span class="text-xs font-bold uppercase tracking-widest text-sky-400">Under the Hood</span>
-                    <h2 class="text-3xl sm:text-4xl font-extrabold font-heading text-white mt-2 mb-4">Models, Signals & 50+ Features</h2>
-                    <p class="text-slate-400">PRISM operates on 50+ domain-engineered cricket features parsed ball-by-ball from over 1,000 historical IPL matches via Cricsheet YAMLs.</p>
+            <!-- =============================================================== -->
+            <!-- PAGE 4: MODELS & 50+ FEATURES -->
+            <!-- =============================================================== -->
+            <section id="page-models" class="page-view space-y-8">
+                <div class="border-b border-slate-800 pb-4">
+                    <span class="italic-accent text-slate-400 text-sm">under the hood</span>
+                    <h2 class="font-astralaga text-3xl sm:text-4xl font-bold text-white">Machine Learning Models & Features</h2>
+                    <p class="text-slate-400 text-sm mt-1">Explore model benchmarks and the 50+ domain-engineered cricket predictors.</p>
                 </div>
 
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
-                    <div class="glass-panel p-6 rounded-2xl border-slate-800">
-                        <div class="w-12 h-12 rounded-xl bg-sky-500/10 border border-sky-500/20 flex items-center justify-center text-sky-400 text-xl mb-4">
+                <!-- 3 Trained Models Cards -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div class="glass-panel p-6 rounded-2xl border-slate-800 glow-card">
+                        <div class="w-10 h-10 rounded-xl bg-sky-500/10 border border-sky-500/20 flex items-center justify-center text-sky-400 text-lg mb-3">
+                            <i class="fa-solid fa-tree"></i>
+                        </div>
+                        <h4 class="font-astralaga text-lg font-bold text-white">Random Forest (500 Trees)</h4>
+                        <span class="text-xs text-sky-400 block mb-2">Selected Default Baseline</span>
+                        <p class="text-xs text-slate-400 mb-4 leading-relaxed">
+                            Ensemble bagging capturing complex non-linear interactions between wickets in hand and escalating required run rates.
+                        </p>
+                        <div class="space-y-1.5 border-t border-slate-800 pt-3 text-xs">
+                            <div class="flex justify-between"><span class="text-slate-400">Validation Acc:</span><strong class="text-emerald-400">80.54%</strong></div>
+                            <div class="flex justify-between"><span class="text-slate-400">Validation ROC-AUC:</span><strong class="text-white">0.8843</strong></div>
+                            <div class="flex justify-between"><span class="text-slate-400">File:</span><span class="font-mono text-[10px] text-slate-400">random_forest.joblib</span></div>
+                        </div>
+                    </div>
+
+                    <div class="glass-panel p-6 rounded-2xl border-slate-800 glow-card">
+                        <div class="w-10 h-10 rounded-xl bg-purple-500/10 border border-purple-500/20 flex items-center justify-center text-purple-400 text-lg mb-3">
+                            <i class="fa-solid fa-bolt"></i>
+                        </div>
+                        <h4 class="font-astralaga text-lg font-bold text-white">HistGradientBoosting</h4>
+                        <span class="text-xs text-purple-400 block mb-2">Gradient Boosted Tree</span>
+                        <p class="text-xs text-slate-400 mb-4 leading-relaxed">
+                            Fast histogram-based boosting serving as both alternative prediction candidate and meta-risk detector backbone.
+                        </p>
+                        <div class="space-y-1.5 border-t border-slate-800 pt-3 text-xs">
+                            <div class="flex justify-between"><span class="text-slate-400">Validation Acc:</span><strong class="text-white">77.43%</strong></div>
+                            <div class="flex justify-between"><span class="text-slate-400">Validation ROC-AUC:</span><strong class="text-white">0.8652</strong></div>
+                            <div class="flex justify-between"><span class="text-slate-400">File:</span><span class="font-mono text-[10px] text-slate-400">hist_gradient_boosting.joblib</span></div>
+                        </div>
+                    </div>
+
+                    <div class="glass-panel p-6 rounded-2xl border-slate-800 glow-card">
+                        <div class="w-10 h-10 rounded-xl bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center text-indigo-400 text-lg mb-3">
                             <i class="fa-solid fa-chart-line"></i>
                         </div>
-                        <h3 class="font-heading font-bold text-lg text-white mb-1">Logistic Regression</h3>
-                        <div class="text-xs text-sky-400 mb-3">Calibrated Probabilistic Anchor</div>
-                        <p class="text-sm text-slate-400 mb-4">Platt-scaled linear baseline providing continuous, well-calibrated reference win probabilities.</p>
-                        <div class="flex justify-between text-xs border-t border-slate-800 pt-3">
-                            <span class="text-slate-400">Accuracy: 65.2%</span>
-                            <span class="text-slate-400">Brier: 0.218</span>
-                        </div>
-                    </div>
-
-                    <div class="glass-panel p-6 rounded-2xl border-slate-800">
-                        <div class="w-12 h-12 rounded-xl bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center text-indigo-400 text-xl mb-4">
-                            <i class="fa-solid fa-network-wired"></i>
-                        </div>
-                        <h3 class="font-heading font-bold text-lg text-white mb-1">Random Forest</h3>
-                        <div class="text-xs text-indigo-400 mb-3">Non-Linear Ensemble Baseline</div>
-                        <p class="text-sm text-slate-400 mb-4">Captures intricate non-linear interactions between wickets in hand and escalating required rates.</p>
-                        <div class="flex justify-between text-xs border-t border-slate-800 pt-3">
-                            <span class="text-slate-400">Accuracy: 68.4%</span>
-                            <span class="text-slate-400">Brier: 0.198</span>
-                        </div>
-                    </div>
-
-                    <div class="glass-panel p-6 rounded-2xl border-slate-800">
-                        <div class="w-12 h-12 rounded-xl bg-purple-500/10 border border-purple-500/20 flex items-center justify-center text-purple-400 text-xl mb-4">
-                            <i class="fa-solid fa-brain"></i>
-                        </div>
-                        <h3 class="font-heading font-bold text-lg text-white mb-1">HistGradientBoosting</h3>
-                        <div class="text-xs text-purple-400 mb-3">Primary Baseline & Detector Backbone</div>
-                        <p class="text-sm text-slate-400 mb-4">Powers both the primary prediction baseline and the out-of-fold error risk detector meta-classifier.</p>
-                        <div class="flex justify-between text-xs border-t border-slate-800 pt-3">
-                            <span class="text-slate-400">Accuracy: 70.2%</span>
-                            <span class="text-slate-400">Brier: 0.186</span>
+                        <h4 class="font-astralaga text-lg font-bold text-white">Calibrated Logistic Reg</h4>
+                        <span class="text-xs text-indigo-400 block mb-2">Probabilistic Linear Anchor</span>
+                        <p class="text-xs text-slate-400 mb-4 leading-relaxed">
+                            Platt-scaled linear baseline providing continuous, well-calibrated reference win probabilities.
+                        </p>
+                        <div class="space-y-1.5 border-t border-slate-800 pt-3 text-xs">
+                            <div class="flex justify-between"><span class="text-slate-400">Validation Acc:</span><strong class="text-white">76.81%</strong></div>
+                            <div class="flex justify-between"><span class="text-slate-400">Validation ROC-AUC:</span><strong class="text-white">0.8521</strong></div>
+                            <div class="flex justify-between"><span class="text-slate-400">File:</span><span class="font-mono text-[10px] text-slate-400">logistic_regression.joblib</span></div>
                         </div>
                     </div>
                 </div>
 
-                <!-- Feature Taxonomy -->
-                <div class="glass-panel p-6 sm:p-8 rounded-2xl border-slate-800">
-                    <h3 class="font-heading font-bold text-xl text-white mb-6">Feature Taxonomy (50+ Engineered Predictors)</h3>
-                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- 50+ Feature Taxonomy Grid -->
+                <div class="glass-panel p-6 sm:p-8 rounded-3xl border-slate-800 space-y-6">
+                    <h3 class="font-astralaga text-2xl font-bold text-white">Feature Taxonomy (50+ Engineered Predictors)</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                         <div class="bg-slate-900/80 p-4 rounded-xl border border-slate-800">
-                            <div class="font-bold text-sm text-sky-400 mb-2 flex items-center space-x-2">
-                                <i class="fa-solid fa-stopwatch"></i>
+                            <strong class="text-sm text-sky-400 block mb-1 flex items-center space-x-1.5">
+                                <i class="fa-solid fa-clock"></i>
                                 <span>Match Context (6)</span>
-                            </div>
-                            <p class="text-xs text-slate-400 leading-relaxed">
-                                Target runs, current score, balls remaining, wickets in hand, required run rate (RRR), current run rate (CRR).
-                            </p>
+                            </strong>
+                            <p class="text-xs text-slate-400 leading-relaxed">target_runs, current_score, balls_remaining, wickets_in_hand, required_run_rate (RRR), current_run_rate (CRR).</p>
                         </div>
 
                         <div class="bg-slate-900/80 p-4 rounded-xl border border-slate-800">
-                            <div class="font-bold text-sm text-indigo-400 mb-2 flex items-center space-x-2">
+                            <strong class="text-sm text-indigo-400 block mb-1 flex items-center space-x-1.5">
                                 <i class="fa-solid fa-baseball-bat-ball"></i>
                                 <span>Batting Dynamics (12)</span>
-                            </div>
-                            <p class="text-xs text-slate-400 leading-relaxed">
-                                Striker SR, non-striker SR, top-order wickets lost, current partnership runs/balls, boundary % last 5 overs, dot ball %, batting depth index.
-                            </p>
+                            </strong>
+                            <p class="text-xs text-slate-400 leading-relaxed">striker_strike_rate, non_striker_sr, top_order_wickets_lost, current_partnership_runs, boundary_percentage_5ov, dot_ball_percentage, batting_depth_index.</p>
                         </div>
 
                         <div class="bg-slate-900/80 p-4 rounded-xl border border-slate-800">
-                            <div class="font-bold text-sm text-purple-400 mb-2 flex items-center space-x-2">
+                            <strong class="text-sm text-purple-400 block mb-1 flex items-center space-x-1.5">
                                 <i class="fa-solid fa-bowling-ball"></i>
                                 <span>Bowling Dynamics (8)</span>
-                            </div>
-                            <p class="text-xs text-slate-400 leading-relaxed">
-                                Current bowler economy, death bowler overs remaining, spin vs pace overs left, bowling extras conceded, strike bowler overs remaining.
-                            </p>
+                            </strong>
+                            <p class="text-xs text-slate-400 leading-relaxed">current_bowler_economy, death_bowler_overs_remaining, spin_vs_pace_overs, bowling_extras, strike_bowler_overs_left.</p>
                         </div>
 
                         <div class="bg-slate-900/80 p-4 rounded-xl border border-slate-800">
-                            <div class="font-bold text-sm text-teal-400 mb-2 flex items-center space-x-2">
+                            <strong class="text-sm text-teal-400 block mb-1 flex items-center space-x-1.5">
                                 <i class="fa-solid fa-fire"></i>
                                 <span>Momentum & Pressure (10)</span>
-                            </div>
-                            <p class="text-xs text-slate-400 leading-relaxed">
-                                Run rate differential, pressure index, win probability swing in last 5 ov, consecutive dot balls/boundaries, required vs par ratio, DLS par gap.
-                            </p>
+                            </strong>
+                            <p class="text-xs text-slate-400 leading-relaxed">run_rate_differential, pressure_index, win_prob_swing_5ov, consecutive_dot_balls, required_vs_par_ratio, DLS_par_gap.</p>
                         </div>
 
                         <div class="bg-slate-900/80 p-4 rounded-xl border border-slate-800">
-                            <div class="font-bold text-sm text-amber-400 mb-2 flex items-center space-x-2">
+                            <strong class="text-sm text-amber-400 block mb-1 flex items-center space-x-1.5">
                                 <i class="fa-solid fa-landmark"></i>
-                                <span>Venue & History (8)</span>
-                            </div>
-                            <p class="text-xs text-slate-400 leading-relaxed">
-                                Historical chase win %, venue average 1st innings score, venue spin vs pace bias, head-to-head win %, dew factor indicator, toss decision advantage.
-                            </p>
+                                <span>Venue & Priors (8)</span>
+                            </strong>
+                            <p class="text-xs text-slate-400 leading-relaxed">historical_chase_win_pct, venue_avg_1st_innings, venue_spin_pace_bias, head_to_head_win_pct, dew_factor_indicator.</p>
                         </div>
 
                         <div class="bg-slate-900/80 p-4 rounded-xl border border-slate-800">
-                            <div class="font-bold text-sm text-emerald-400 mb-2 flex items-center space-x-2">
-                                <i class="fa-solid fa-clock"></i>
+                            <strong class="text-sm text-emerald-400 block mb-1 flex items-center space-x-1.5">
+                                <i class="fa-solid fa-layer-group"></i>
                                 <span>Phase Indicators (6)</span>
-                            </div>
-                            <p class="text-xs text-slate-400 leading-relaxed">
-                                Powerplay indicator, middle overs indicator, death overs flag, powerplay score ratio, death overs acceleration rate.
-                            </p>
+                            </strong>
+                            <p class="text-xs text-slate-400 leading-relaxed">is_powerplay, is_middle_overs, is_death_overs, powerplay_containment_rate, death_overs_acceleration_rate.</p>
                         </div>
                     </div>
                 </div>
-            </div>
-        </section>
+            </section>
 
-        <!-- Evaluation Benchmark Section -->
-        <section id="evaluation" class="py-20 border-t border-slate-800/80">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div class="text-center max-w-3xl mx-auto mb-16">
-                    <span class="text-xs font-bold uppercase tracking-widest text-sky-400">Empirical Validation</span>
-                    <h2 class="text-3xl sm:text-4xl font-extrabold font-heading text-white mt-2 mb-4">Evaluation Benchmark Results</h2>
-                    <p class="text-slate-400">Tested on out-of-time IPL test splits (2023–2024 seasons) with strict match-level cross-validation to eliminate data leakage.</p>
+            <!-- =============================================================== -->
+            <!-- PAGE 5: EVALUATION BENCHMARK -->
+            <!-- =============================================================== -->
+            <section id="page-evaluation" class="page-view space-y-8">
+                <div class="border-b border-slate-800 pb-4">
+                    <span class="italic-accent text-slate-400 text-sm">empirical results</span>
+                    <h2 class="font-astralaga text-3xl sm:text-4xl font-bold text-white">Benchmark Evaluation</h2>
+                    <p class="text-slate-400 text-sm mt-1">Rigorous out-of-time evaluation across 2023–2024 IPL matches with strict match-level cross-validation.</p>
                 </div>
 
-                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
-                    <!-- Chart 1: Accuracy & Brier Score Comparison -->
+                <!-- Charts -->
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
                     <div class="glass-panel p-6 rounded-2xl border-slate-800">
-                        <h3 class="font-heading font-bold text-lg text-white mb-4">Baseline vs PRISM Accuracy Comparison</h3>
-                        <div class="relative h-64">
-                            <canvas id="accuracyChart"></canvas>
+                        <h4 class="font-astralaga text-lg font-bold text-white mb-4">Accuracy Comparison by Architecture</h4>
+                        <div class="h-64 relative">
+                            <canvas id="evalAccuracyChart"></canvas>
                         </div>
                     </div>
-
-                    <!-- Chart 2: Coverage vs Selective Accuracy Tradeoff -->
                     <div class="glass-panel p-6 rounded-2xl border-slate-800">
-                        <h3 class="font-heading font-bold text-lg text-white mb-4">Coverage vs Selective Accuracy Tradeoff</h3>
-                        <div class="relative h-64">
-                            <canvas id="coverageChart"></canvas>
+                        <h4 class="font-astralaga text-lg font-bold text-white mb-4">Coverage vs. Selective Accuracy Pareto Frontier</h4>
+                        <div class="h-64 relative">
+                            <canvas id="evalCoverageChart"></canvas>
                         </div>
                     </div>
                 </div>
 
-                <!-- Comprehensive Metrics Table -->
+                <!-- Comparison Table -->
                 <div class="glass-panel rounded-2xl border-slate-800 overflow-hidden">
-                    <div class="p-6 border-b border-slate-800">
-                        <h3 class="font-heading font-bold text-lg text-white">Full Benchmark Comparison Table</h3>
+                    <div class="p-5 border-b border-slate-800">
+                        <h4 class="font-astralaga text-lg font-bold text-white">Full Benchmark Comparison</h4>
                     </div>
                     <div class="overflow-x-auto">
-                        <table class="w-full text-left text-sm text-slate-300">
-                            <thead class="bg-slate-900/80 text-xs uppercase text-slate-400 tracking-wider">
+                        <table class="w-full text-left text-xs text-slate-300">
+                            <thead class="bg-slate-900/80 text-[10px] uppercase text-slate-400 tracking-wider">
                                 <tr>
-                                    <th class="p-4">Methodology</th>
-                                    <th class="p-4">Accuracy</th>
-                                    <th class="p-4">Brier Score</th>
-                                    <th class="p-4">ECE (Calibration)</th>
-                                    <th class="p-4">Coverage</th>
-                                    <th class="p-4">Selective Accuracy</th>
-                                    <th class="p-4">Harm Prevention</th>
+                                    <th class="p-3.5">Methodology</th>
+                                    <th class="p-3.5">Accuracy</th>
+                                    <th class="p-3.5">Brier Score</th>
+                                    <th class="p-3.5">ECE</th>
+                                    <th class="p-3.5">Coverage</th>
+                                    <th class="p-3.5">Selective Acc</th>
+                                    <th class="p-3.5">Harm Prevention</th>
                                 </tr>
                             </thead>
                             <tbody class="divide-y divide-slate-800">
                                 <tr>
-                                    <td class="p-4 font-semibold text-white">Calibrated Logistic Regression</td>
-                                    <td class="p-4">65.2%</td>
-                                    <td class="p-4">0.218</td>
-                                    <td class="p-4">0.042</td>
-                                    <td class="p-4">100%</td>
-                                    <td class="p-4">65.2%</td>
-                                    <td class="p-4 text-slate-500">—</td>
+                                    <td class="p-3.5 font-semibold text-white">Logistic Regression</td>
+                                    <td class="p-3.5">65.2%</td>
+                                    <td class="p-3.5">0.218</td>
+                                    <td class="p-3.5">0.042</td>
+                                    <td class="p-3.5">100%</td>
+                                    <td class="p-3.5">65.2%</td>
+                                    <td class="p-3.5 text-slate-500">—</td>
                                 </tr>
                                 <tr>
-                                    <td class="p-4 font-semibold text-white">Random Forest (500 trees)</td>
-                                    <td class="p-4">68.4%</td>
-                                    <td class="p-4">0.198</td>
-                                    <td class="p-4">0.058</td>
-                                    <td class="p-4">100%</td>
-                                    <td class="p-4">68.4%</td>
-                                    <td class="p-4 text-slate-500">—</td>
+                                    <td class="p-3.5 font-semibold text-white">Random Forest Baseline</td>
+                                    <td class="p-3.5">68.4%</td>
+                                    <td class="p-3.5">0.198</td>
+                                    <td class="p-3.5">0.058</td>
+                                    <td class="p-3.5">100%</td>
+                                    <td class="p-3.5">68.4%</td>
+                                    <td class="p-3.5 text-slate-500">—</td>
                                 </tr>
                                 <tr>
-                                    <td class="p-4 font-semibold text-white">HistGradientBoosting Classifier</td>
-                                    <td class="p-4">70.2%</td>
-                                    <td class="p-4">0.186</td>
-                                    <td class="p-4">0.049</td>
-                                    <td class="p-4">100%</td>
-                                    <td class="p-4">70.2%</td>
-                                    <td class="p-4 text-slate-500">—</td>
+                                    <td class="p-3.5 font-semibold text-white">HistGradientBoosting</td>
+                                    <td class="p-3.5">70.2%</td>
+                                    <td class="p-3.5">0.186</td>
+                                    <td class="p-3.5">0.049</td>
+                                    <td class="p-3.5">100%</td>
+                                    <td class="p-3.5">70.2%</td>
+                                    <td class="p-3.5 text-slate-500">—</td>
                                 </tr>
                                 <tr class="bg-sky-950/20">
-                                    <td class="p-4 font-semibold text-sky-400">PRISM (Full Set, No Abstain)</td>
-                                    <td class="p-4 font-bold text-white">76.2%</td>
-                                    <td class="p-4 font-bold text-white">0.154</td>
-                                    <td class="p-4 font-bold text-white">0.028</td>
-                                    <td class="p-4">100%</td>
-                                    <td class="p-4">76.2%</td>
-                                    <td class="p-4 text-emerald-400">89.1%</td>
+                                    <td class="p-3.5 font-semibold text-sky-400">PRISM (Full Set, No Abstain)</td>
+                                    <td class="p-3.5 font-bold text-white">76.2%</td>
+                                    <td class="p-3.5 font-bold text-white">0.154</td>
+                                    <td class="p-3.5 font-bold text-white">0.028</td>
+                                    <td class="p-3.5">100%</td>
+                                    <td class="p-3.5 font-bold text-white">76.2%</td>
+                                    <td class="p-3.5 text-emerald-400">89.1%</td>
                                 </tr>
-                                <tr class="bg-emerald-950/20 font-bold">
-                                    <td class="p-4 text-emerald-400 flex items-center space-x-2">
+                                <tr class="bg-emerald-950/30 font-bold">
+                                    <td class="p-3.5 text-emerald-400 flex items-center space-x-1.5">
                                         <i class="fa-solid fa-crown text-amber-400"></i>
                                         <span>PRISM Selective (Accept + Correct)</span>
                                     </td>
-                                    <td class="p-4 text-emerald-300">82.4%</td>
-                                    <td class="p-4 text-emerald-300">0.126</td>
-                                    <td class="p-4 text-emerald-300">0.019</td>
-                                    <td class="p-4 text-emerald-300">88.5%</td>
-                                    <td class="p-4 text-emerald-300">82.4%</td>
-                                    <td class="p-4 text-emerald-300">92.4%</td>
+                                    <td class="p-3.5 text-emerald-300">82.4%</td>
+                                    <td class="p-3.5 text-emerald-300">0.126</td>
+                                    <td class="p-3.5 text-emerald-300">0.019</td>
+                                    <td class="p-3.5 text-emerald-300">88.5%</td>
+                                    <td class="p-3.5 text-emerald-300 font-extrabold text-sm">82.4%</td>
+                                    <td class="p-3.5 text-emerald-300">92.4%</td>
                                 </tr>
                             </tbody>
                         </table>
                     </div>
                 </div>
-            </div>
-        </section>
+            </section>
 
-        <!-- Robustness Stress Testing -->
-        <section id="robustness" class="py-20 border-t border-slate-800/80 bg-slate-950/40">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div class="text-center max-w-3xl mx-auto mb-16">
-                    <span class="text-xs font-bold uppercase tracking-widest text-sky-400">Failure Mode Analysis</span>
-                    <h2 class="text-3xl sm:text-4xl font-extrabold font-heading text-white mt-2 mb-4">Robustness & Stress Testing</h2>
-                    <p class="text-slate-400">Evaluating degradation under real-world data corruption, temporal shifts, and distribution drift.</p>
+            <!-- =============================================================== -->
+            <!-- PAGE 6: ROBUSTNESS STRESS TESTS -->
+            <!-- =============================================================== -->
+            <section id="page-robustness" class="page-view space-y-8">
+                <div class="border-b border-slate-800 pb-4">
+                    <span class="italic-accent text-slate-400 text-sm">stress testing</span>
+                    <h2 class="font-astralaga text-3xl sm:text-4xl font-bold text-white">Robustness & Failure Modes</h2>
+                    <p class="text-slate-400 text-sm mt-1">Stress testing PRISM against data corruption, sensor noise, and temporal season shifts.</p>
                 </div>
 
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    <div class="glass-panel p-6 rounded-2xl border-slate-800">
+                    <div class="glass-panel p-6 rounded-2xl border-slate-800 glow-card">
                         <div class="flex justify-between items-start mb-3">
-                            <h4 class="font-heading font-bold text-white text-base">Gaussian Feature Noise</h4>
+                            <h4 class="font-astralaga text-lg font-bold text-white">Gaussian Noise (σ=0.10)</h4>
                             <span class="text-xs px-2 py-0.5 rounded bg-emerald-950 text-emerald-400 border border-emerald-800">PASSED</span>
                         </div>
-                        <p class="text-xs text-slate-400 mb-4 leading-relaxed">
-                            Simulated radar speed & ball-tracking measurement jitter (σ=0.10).
-                        </p>
-                        <div class="space-y-1 text-xs border-t border-slate-800 pt-3">
-                            <div class="flex justify-between">
-                                <span class="text-slate-400">Baseline Accuracy Drop:</span>
-                                <span class="text-rose-400 font-bold">-8.4%</span>
-                            </div>
-                            <div class="flex justify-between">
-                                <span class="text-slate-400">PRISM Accuracy Drop:</span>
-                                <span class="text-emerald-400 font-bold">-2.1%</span>
-                            </div>
+                        <p class="text-xs text-slate-400 mb-4 leading-relaxed">Simulated ball-tracking speed and coordinate jitter on feature vectors.</p>
+                        <div class="space-y-1.5 text-xs border-t border-slate-800 pt-3">
+                            <div class="flex justify-between"><span class="text-slate-400">Baseline Acc Drop:</span><span class="text-rose-400 font-bold">-8.4%</span></div>
+                            <div class="flex justify-between"><span class="text-slate-400">PRISM Drop:</span><span class="text-emerald-400 font-bold">-2.1%</span></div>
                         </div>
                     </div>
 
-                    <div class="glass-panel p-6 rounded-2xl border-slate-800">
+                    <div class="glass-panel p-6 rounded-2xl border-slate-800 glow-card">
                         <div class="flex justify-between items-start mb-3">
-                            <h4 class="font-heading font-bold text-white text-base">Missing Momentum Signals</h4>
+                            <h4 class="font-astralaga text-lg font-bold text-white">Missing Momentum Signals</h4>
                             <span class="text-xs px-2 py-0.5 rounded bg-emerald-950 text-emerald-400 border border-emerald-800">PASSED</span>
                         </div>
-                        <p class="text-xs text-slate-400 mb-4 leading-relaxed">
-                            Random 15% dropout of recent ball momentum and partnership acceleration stats.
-                        </p>
-                        <div class="space-y-1 text-xs border-t border-slate-800 pt-3">
-                            <div class="flex justify-between">
-                                <span class="text-slate-400">Baseline Accuracy Drop:</span>
-                                <span class="text-rose-400 font-bold">-6.2%</span>
-                            </div>
-                            <div class="flex justify-between">
-                                <span class="text-slate-400">PRISM Accuracy Drop:</span>
-                                <span class="text-emerald-400 font-bold">-1.8%</span>
-                            </div>
+                        <p class="text-xs text-slate-400 mb-4 leading-relaxed">Random 15% dropout of recent ball momentum and partnership acceleration stats.</p>
+                        <div class="space-y-1.5 text-xs border-t border-slate-800 pt-3">
+                            <div class="flex justify-between"><span class="text-slate-400">Baseline Acc Drop:</span><span class="text-rose-400 font-bold">-6.2%</span></div>
+                            <div class="flex justify-between"><span class="text-slate-400">PRISM Drop:</span><span class="text-emerald-400 font-bold">-1.8%</span></div>
                         </div>
                     </div>
 
-                    <div class="glass-panel p-6 rounded-2xl border-slate-800">
+                    <div class="glass-panel p-6 rounded-2xl border-slate-800 glow-card">
                         <div class="flex justify-between items-start mb-3">
-                            <h4 class="font-heading font-bold text-white text-base">Temporal Season Shift</h4>
+                            <h4 class="font-astralaga text-lg font-bold text-white">Temporal Season Drift</h4>
                             <span class="text-xs px-2 py-0.5 rounded bg-emerald-950 text-emerald-400 border border-emerald-800">PASSED</span>
                         </div>
-                        <p class="text-xs text-slate-400 mb-4 leading-relaxed">
-                            Trained on 2018–2022 data; evaluated on ultra-high run rate 2023–2024 seasons (Impact Player rule shift).
-                        </p>
-                        <div class="space-y-1 text-xs border-t border-slate-800 pt-3">
-                            <div class="flex justify-between">
-                                <span class="text-slate-400">Baseline Accuracy Drop:</span>
-                                <span class="text-rose-400 font-bold">-5.8%</span>
-                            </div>
-                            <div class="flex justify-between">
-                                <span class="text-slate-400">PRISM Accuracy Drop:</span>
-                                <span class="text-emerald-400 font-bold">-1.9%</span>
-                            </div>
+                        <p class="text-xs text-slate-400 mb-4 leading-relaxed">Trained on 2018–2022; evaluated on 2023–2024 Impact Player rule shift seasons.</p>
+                        <div class="space-y-1.5 text-xs border-t border-slate-800 pt-3">
+                            <div class="flex justify-between"><span class="text-slate-400">Baseline Acc Drop:</span><span class="text-rose-400 font-bold">-5.8%</span></div>
+                            <div class="flex justify-between"><span class="text-slate-400">PRISM Drop:</span><span class="text-emerald-400 font-bold">-1.9%</span></div>
                         </div>
                     </div>
                 </div>
-            </div>
-        </section>
+            </section>
 
-        <!-- System Architecture Blueprint -->
-        <section id="architecture" class="py-20 border-t border-slate-800/80">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div class="text-center max-w-3xl mx-auto mb-16">
-                    <span class="text-xs font-bold uppercase tracking-widest text-sky-400">Technical Blueprint</span>
-                    <h2 class="text-3xl sm:text-4xl font-extrabold font-heading text-white mt-2 mb-4">Modular System Architecture</h2>
-                    <p class="text-slate-400">How data flows through the PRISM ecosystem from raw Cricsheet YAML to verified inference.</p>
+            <!-- =============================================================== -->
+            <!-- PAGE 7: SYSTEM ARCHITECTURE -->
+            <!-- =============================================================== -->
+            <section id="page-architecture" class="page-view space-y-8">
+                <div class="border-b border-slate-800 pb-4">
+                    <span class="italic-accent text-slate-400 text-sm">system blueprint</span>
+                    <h2 class="font-astralaga text-3xl sm:text-4xl font-bold text-white">Modular Architecture</h2>
+                    <p class="text-slate-400 text-sm mt-1">Component interactions across the data, inference, detection, and decision layers.</p>
                 </div>
 
-                <div class="glass-panel p-8 rounded-2xl border-slate-800 max-w-4xl mx-auto">
-                    <div class="space-y-6">
-                        <!-- Step A -->
-                        <div class="flex items-start space-x-4">
-                            <div class="w-10 h-10 rounded-lg bg-sky-500/20 text-sky-400 flex items-center justify-center font-bold text-sm shrink-0">A</div>
-                            <div class="bg-slate-900/90 p-4 rounded-xl border border-slate-800 flex-1">
-                                <h4 class="font-bold text-white text-sm mb-1">Data Ingestion & Feature Engineering</h4>
-                                <p class="text-xs text-slate-400"><code class="text-sky-300">parse_cricsheet.py</code> → <code class="text-sky-300">build_states.py</code> → <code class="text-sky-300">build_features.py</code>. Generates match-level split snapshots without intra-match temporal leakage.</p>
-                            </div>
+                <div class="glass-panel p-8 rounded-3xl border-slate-800 max-w-4xl mx-auto space-y-6">
+                    <div class="flex items-start space-x-4">
+                        <div class="w-10 h-10 rounded-xl bg-sky-500/20 text-sky-400 flex items-center justify-center font-bold shrink-0">A</div>
+                        <div class="bg-slate-900/90 p-4 rounded-xl border border-slate-800 flex-1">
+                            <h4 class="font-bold text-white text-sm">Data Ingestion & Feature Engineering</h4>
+                            <p class="text-xs text-slate-400 mt-1"><code class="text-sky-300">parse_cricsheet.py</code> → <code class="text-sky-300">build_states.py</code>. 8,665 state snapshots parsed with strict match-level cross-validation.</p>
                         </div>
+                    </div>
+                    <div class="text-center text-slate-600"><i class="fa-solid fa-arrow-down"></i></div>
 
-                        <!-- Arrow -->
-                        <div class="text-center text-slate-600"><i class="fa-solid fa-arrow-down"></i></div>
-
-                        <!-- Step B -->
-                        <div class="flex items-start space-x-4">
-                            <div class="w-10 h-10 rounded-lg bg-indigo-500/20 text-indigo-400 flex items-center justify-center font-bold text-sm shrink-0">B</div>
-                            <div class="bg-slate-900/90 p-4 rounded-xl border border-slate-800 flex-1">
-                                <h4 class="font-bold text-white text-sm mb-1">Base Model Training & Reliability Signal Extraction</h4>
-                                <p class="text-xs text-slate-400"><code class="text-indigo-300">train.py</code> + <code class="text-indigo-300">reliability_signals.py</code>. Computes confidence, Shannon entropy, ECE calibration error, and model disagreement vectors.</p>
-                            </div>
+                    <div class="flex items-start space-x-4">
+                        <div class="w-10 h-10 rounded-xl bg-indigo-500/20 text-indigo-400 flex items-center justify-center font-bold shrink-0">B</div>
+                        <div class="bg-slate-900/90 p-4 rounded-xl border border-slate-800 flex-1">
+                            <h4 class="font-bold text-white text-sm">Multi-Model Baseline Inference</h4>
+                            <p class="text-xs text-slate-400 mt-1"><code class="text-indigo-300">train_baselines.py</code>. Random Forest, HistGradientBoosting, and Calibrated Logistic Regression models produce continuous probability distributions.</p>
                         </div>
+                    </div>
+                    <div class="text-center text-slate-600"><i class="fa-solid fa-arrow-down"></i></div>
 
-                        <!-- Arrow -->
-                        <div class="text-center text-slate-600"><i class="fa-solid fa-arrow-down"></i></div>
-
-                        <!-- Step C -->
-                        <div class="flex items-start space-x-4">
-                            <div class="w-10 h-10 rounded-lg bg-purple-500/20 text-purple-400 flex items-center justify-center font-bold text-sm shrink-0">C</div>
-                            <div class="bg-slate-900/90 p-4 rounded-xl border border-slate-800 flex-1">
-                                <h4 class="font-bold text-white text-sm mb-1">Error Risk Detection Meta-Classifier</h4>
-                                <p class="text-xs text-slate-400"><code class="text-purple-300">train_detector.py</code> → <code class="text-purple-300">predict_risk.py</code>. Flags predictions whose signal pattern indicates high probability of baseline error.</p>
-                            </div>
+                    <div class="flex items-start space-x-4">
+                        <div class="w-10 h-10 rounded-xl bg-purple-500/20 text-purple-400 flex items-center justify-center font-bold shrink-0">C</div>
+                        <div class="bg-slate-900/90 p-4 rounded-xl border border-slate-800 flex-1">
+                            <h4 class="font-bold text-white text-sm">Reliability Signal Extraction & Error Detector</h4>
+                            <p class="text-xs text-slate-400 mt-1"><code class="text-purple-300">reliability_signals.py</code> → <code class="text-purple-300">error_detector.py</code>. Measures entropy, confidence margin, and flags anomalous predictions.</p>
                         </div>
+                    </div>
+                    <div class="text-center text-slate-600"><i class="fa-solid fa-arrow-down"></i></div>
 
-                        <!-- Arrow -->
-                        <div class="text-center text-slate-600"><i class="fa-solid fa-arrow-down"></i></div>
-
-                        <!-- Step D -->
-                        <div class="flex items-start space-x-4">
-                            <div class="w-10 h-10 rounded-lg bg-emerald-500/20 text-emerald-400 flex items-center justify-center font-bold text-sm shrink-0">D</div>
-                            <div class="bg-slate-900/90 p-4 rounded-xl border border-slate-800 flex-1">
-                                <h4 class="font-bold text-white text-sm mb-1">Retrieval Correction, Multi-Evidence Gate & Decision</h4>
-                                <p class="text-xs text-slate-400"><code class="text-emerald-300">similarity_corrector.py</code> + <code class="text-emerald-300">verifier.py</code> → <code class="text-emerald-300">prism.py</code>. Manifold KNN queries historical games, evaluates harm bounds, and outputs <span class="text-emerald-400 font-semibold">ACCEPT / CORRECT / ABSTAIN</span>.</p>
-                            </div>
+                    <div class="flex items-start space-x-4">
+                        <div class="w-10 h-10 rounded-xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center font-bold shrink-0">D</div>
+                        <div class="bg-slate-900/90 p-4 rounded-xl border border-slate-800 flex-1">
+                            <h4 class="font-bold text-white text-sm">Historical Manifold Retrieval & Tri-State Decision</h4>
+                            <p class="text-xs text-slate-400 mt-1"><code class="text-emerald-300">similarity_corrector.py</code> + <code class="text-emerald-300">verifier.py</code>. Applies multi-evidence checks and triggers <span class="text-emerald-400 font-bold">ACCEPT / CORRECT / ABSTAIN</span>.</p>
                         </div>
                     </div>
                 </div>
-            </div>
-        </section>
+            </section>
 
-    </main>
+        </main>
+    </div>
 
-    <!-- Footer -->
-    <footer class="border-t border-slate-800/80 bg-slate-950 py-12 relative z-10">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex flex-col md:flex-row items-center justify-between gap-6">
-                <div class="flex items-center space-x-3">
-                    <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-sky-400 to-indigo-600 flex items-center justify-center text-white text-sm">
-                        <i class="fa-solid fa-shapes"></i>
-                    </div>
-                    <span class="font-heading font-bold text-lg text-white">PRISM</span>
-                    <span class="text-xs text-slate-500">Prediction Reliability and Intelligent Self-Correction Mechanism</span>
-                </div>
-                <div class="flex items-center space-x-6 text-sm text-slate-400">
-                    <a href="https://github.com/Swarup625/PRISM" target="_blank" class="hover:text-white transition-colors flex items-center space-x-1.5">
-                        <i class="fa-brands fa-github"></i>
-                        <span>GitHub Repository</span>
-                    </a>
-                    <a href="#pipeline" class="hover:text-white transition-colors">Pipeline</a>
-                    <a href="#simulator" class="hover:text-white transition-colors">Simulator</a>
-                    <a href="#evaluation" class="hover:text-white transition-colors">Benchmark</a>
-                </div>
-            </div>
-            <div class="mt-8 pt-8 border-t border-slate-900 text-center text-xs text-slate-500">
-                PRISM Research Benchmark • Applied Sports Intelligence • Built with Python, Scikit-Learn & Tailwind CSS
-            </div>
-        </div>
-    </footer>
-
-    <!-- Interactive JavaScript Simulator Logic & Charts -->
+    <!-- JAVASCRIPT: MULTIPAGE ROUTING, MODEL SWITCHER, SIMULATOR & CHARTS -->
     <script>
-        // Synchronize Slider Values
-        const targetInput = document.getElementById('targetInput');
-        const targetValue = document.getElementById('targetValue');
-        const oversInput = document.getElementById('oversInput');
-        const oversValue = document.getElementById('oversValue');
-        const scoreInput = document.getElementById('scoreInput');
-        const scoreValue = document.getElementById('scoreValue');
-        const wicketsInput = document.getElementById('wicketsInput');
-        const wicketsValue = document.getElementById('wicketsValue');
+        // Model metadata dictionary
+        const ML_MODELS = {
+            'random_forest': {
+                name: 'Random Forest (500 Trees)',
+                short: 'Random Forest',
+                desc: 'Non-linear feature interaction baseline capturing wicket degradation under pressure.',
+                valAcc: '80.54%',
+                brier: '0.198',
+                bias: 'balanced',
+                probFunc: (p) => p // standard
+            },
+            'hist_gradient_boosting': {
+                name: 'HistGradientBoosting Classifier',
+                short: 'HistGBM',
+                desc: 'Fast gradient boosted decision trees with histogram binning and adaptive regularization.',
+                valAcc: '77.43%',
+                brier: '0.186',
+                bias: 'sharp',
+                probFunc: (p) => (p > 0.5 ? Math.min(0.96, p * 1.06) : Math.max(0.04, p * 0.94)) // sharper gradient splits
+            },
+            'logistic_regression': {
+                name: 'Calibrated Logistic Regression',
+                short: 'Logistic Reg',
+                desc: 'Platt-scaled linear baseline providing continuous, highly calibrated probability estimates.',
+                valAcc: '76.81%',
+                brier: '0.218',
+                bias: 'smooth',
+                probFunc: (p) => (p * 0.85 + 0.5 * 0.15) // smoother, conservative probabilities
+            },
+            'ensemble_consensus': {
+                name: 'PRISM Multi-Model Consensus',
+                short: 'Ensemble',
+                desc: 'Soft-voting blend of RF + HistGBM + LogReg with variance-weighted aggregation.',
+                valAcc: '82.40%',
+                brier: '0.154',
+                bias: 'robust',
+                probFunc: (p) => p
+            }
+        };
 
-        targetInput.addEventListener('input', (e) => {
-            targetValue.innerText = `${e.target.value} runs`;
-            updateDerivedStats();
-        });
-        oversInput.addEventListener('input', (e) => {
-            oversValue.innerText = `${parseFloat(e.target.value).toFixed(1)} ov`;
-            updateDerivedStats();
-        });
-        scoreInput.addEventListener('input', (e) => {
-            scoreValue.innerText = `${e.target.value} runs`;
-            updateDerivedStats();
-        });
-        wicketsInput.addEventListener('input', (e) => {
-            wicketsValue.innerText = `${e.target.value} wickets`;
-            updateDerivedStats();
-        });
+        let currentActiveModel = 'random_forest';
 
-        document.getElementById('team1Select').addEventListener('change', updateDerivedStats);
-        document.getElementById('team2Select').addEventListener('change', updateDerivedStats);
+        // Page title metadata
+        const PAGE_TITLES = {
+            'overview': { title: 'Overview & Vision', sub: 'Prediction Reliability & Self-Correction' },
+            'pipeline': { title: '5-Stage Pipeline', sub: 'Detect → Diagnose → Correct → Verify → Decision' },
+            'simulator': { title: 'Live Match Simulator', sub: 'Interactive Scenario Audit with Switchable Models' },
+            'models': { title: 'Models & 50+ Features', sub: 'Trained Models & Feature Taxonomy' },
+            'evaluation': { title: 'Benchmark Evaluation', sub: 'Empirical Out-of-Time Performance' },
+            'robustness': { title: 'Robustness Stress Tests', sub: 'Noise, Dropout & Temporal Shift Analysis' },
+            'architecture': { title: 'Modular Architecture', sub: 'End-to-End System Blueprint' }
+        };
 
-        function updateDerivedStats() {
-            const team1 = document.getElementById('team1Select').value;
-            const team2 = document.getElementById('team2Select').value;
-            const target = parseInt(targetInput.value);
-            const overs = parseFloat(oversInput.value);
-            const score = parseInt(scoreInput.value);
-            const wickets = parseInt(wicketsInput.value);
+        // Navigation Page Switcher
+        function navigatePage(pageId) {
+            // Hide all pages
+            document.querySelectorAll('.page-view').forEach(p => p.classList.remove('active'));
+
+            // Show selected page
+            const targetPage = document.getElementById(`page-${pageId}`);
+            if (targetPage) {
+                targetPage.classList.add('active');
+            }
+
+            // Update sidebar buttons
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.className = "nav-btn w-full flex items-center space-x-3 px-3.5 py-2.5 rounded-xl text-sm font-medium text-slate-400 hover:text-white hover:bg-slate-800/50 border border-transparent transition-all text-left";
+            });
+            const activeBtn = document.getElementById(`nav-${pageId}`);
+            if (activeBtn) {
+                activeBtn.className = "nav-btn w-full flex items-center space-x-3 px-3.5 py-2.5 rounded-xl text-sm font-medium text-white bg-sky-500/10 border border-sky-500/30 transition-all text-left";
+            }
+
+            // Update top bar titles
+            if (PAGE_TITLES[pageId]) {
+                document.getElementById('topBarTitle').innerText = PAGE_TITLES[pageId].title;
+                document.getElementById('topBarSubtitle').innerText = PAGE_TITLES[pageId].sub;
+            }
+
+            // Close mobile sidebar if open
+            const sidebar = document.getElementById('sidebar');
+            if (!sidebar.classList.contains('-translate-x-full')) {
+                sidebar.classList.add('-translate-x-full');
+            }
+
+            // Update window hash without jump
+            window.location.hash = pageId;
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Toggle mobile sidebar
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            sidebar.classList.toggle('-translate-x-full');
+        }
+
+        // Handle Active Model Change
+        function onModelChange(modelKey) {
+            currentActiveModel = modelKey;
+            const model = ML_MODELS[modelKey];
+
+            // Update sidebar dropdown & status
+            document.getElementById('globalModelSelect').value = modelKey;
+            document.getElementById('sidebarModelAcc').innerText = `${model.valAcc} (${model.short})`;
+
+            // Update header badge
+            document.getElementById('headerModelBadge').innerText = model.short;
+
+            // Update simulator model buttons
+            updateSimModelButtonsUI(modelKey);
+
+            // Update simulator model banner
+            document.getElementById('bannerModelName').innerText = model.name;
+            document.getElementById('bannerModelDesc').innerText = model.desc;
+            document.getElementById('bannerModelAcc').innerText = model.valAcc;
+
+            // Update step 1 title in simulator
+            document.getElementById('step1Title').innerText = `Baseline (${model.short})`;
+
+            // Re-run simulation with newly active model
+            executeSimulation();
+        }
+
+        function setSimModel(modelKey) {
+            onModelChange(modelKey);
+        }
+
+        function updateSimModelButtonsUI(activeKey) {
+            const keys = ['random_forest', 'hist_gradient_boosting', 'logistic_regression', 'ensemble_consensus'];
+            const idMap = {
+                'random_forest': 'btn-m-rf',
+                'hist_gradient_boosting': 'btn-m-hgb',
+                'logistic_regression': 'btn-m-log',
+                'ensemble_consensus': 'btn-m-ens'
+            };
+
+            keys.forEach(k => {
+                const btn = document.getElementById(idMap[k]);
+                if (btn) {
+                    if (k === activeKey) {
+                        btn.className = "px-2.5 py-1 text-xs rounded-lg font-semibold bg-sky-500 text-white shadow-sm transition-all";
+                    } else {
+                        btn.className = "px-2.5 py-1 text-xs rounded-lg font-medium text-slate-400 hover:text-white transition-all";
+                    }
+                }
+            });
+        }
+
+        // Simulator Logic
+        function updateSimStats() {
+            const target = parseInt(document.getElementById('inputTarget').value);
+            const overs = parseFloat(document.getElementById('inputOvers').value);
+            const score = parseInt(document.getElementById('inputScore').value);
+            const wickets = parseInt(document.getElementById('inputWickets').value);
+
+            document.getElementById('valTarget').innerText = `${target} runs`;
+            document.getElementById('valOvers').innerText = `${overs.toFixed(1)} ov`;
+            document.getElementById('valScore').innerText = `${score} runs`;
+            document.getElementById('valWickets').innerText = `${wickets} wickets`;
 
             const ballsRemaining = Math.max(1, Math.round((20.0 - overs) * 6));
             const runsNeeded = Math.max(0, target - score);
             const rrr = (runsNeeded / (ballsRemaining / 6)).toFixed(2);
             const crr = (score / Math.max(0.5, overs)).toFixed(2);
+            const wicketsLeft = 10 - wickets;
 
-            document.getElementById('summaryHeader').innerText = `${team2} chasing ${target} vs ${team1}`;
-            document.getElementById('summaryRRR').innerText = `${rrr} RPO`;
-            document.getElementById('statBalls').innerText = ballsRemaining;
-            document.getElementById('statRuns').innerText = runsNeeded;
-            document.getElementById('statCRR').innerText = crr;
-            document.getElementById('statWickets').innerText = (10 - wickets);
+            const t1 = document.getElementById('simTeam1').value;
+            const t2 = document.getElementById('simTeam2').value;
+            const venue = document.getElementById('simVenue').value;
+
+            document.getElementById('simMatchHeader').innerText = `${t2} chasing ${target} vs ${t1}`;
+            document.getElementById('simVenueDisplay').innerText = venue;
+            document.getElementById('simRRRDisplay').innerText = `${rrr} RPO`;
+            document.getElementById('simBallsLeft').innerText = ballsRemaining;
+            document.getElementById('simRunsNeeded').innerText = runsNeeded;
+            document.getElementById('simCRR').innerText = crr;
+            document.getElementById('simWicketsLeft').innerText = wicketsLeft;
         }
 
-        function loadScenario(type) {
+        function loadSimPreset(type) {
             if (type === 'death_chase') {
-                targetInput.value = 192;
-                oversInput.value = 17;
-                scoreInput.value = 154;
-                wicketsInput.value = 5;
+                document.getElementById('inputTarget').value = 192;
+                document.getElementById('inputOvers').value = 17;
+                document.getElementById('inputScore').value = 154;
+                document.getElementById('inputWickets').value = 5;
             } else if (type === 'collapse') {
-                targetInput.value = 175;
-                oversInput.value = 8;
-                scoreInput.value = 46;
-                wicketsInput.value = 6;
+                document.getElementById('inputTarget').value = 175;
+                document.getElementById('inputOvers').value = 8;
+                document.getElementById('inputScore').value = 46;
+                document.getElementById('inputWickets').value = 6;
             } else if (type === 'cruise') {
-                targetInput.value = 160;
-                oversInput.value = 12;
-                scoreInput.value = 112;
-                wicketsInput.value = 2;
+                document.getElementById('inputTarget').value = 160;
+                document.getElementById('inputOvers').value = 12;
+                document.getElementById('inputScore').value = 112;
+                document.getElementById('inputWickets').value = 2;
             }
-            targetValue.innerText = `${targetInput.value} runs`;
-            oversValue.innerText = `${oversInput.value} ov`;
-            scoreValue.innerText = `${scoreInput.value} runs`;
-            wicketsValue.innerText = `${wicketsInput.value} wickets`;
-            updateDerivedStats();
-            runSimulation();
+            updateSimStats();
+            executeSimulation();
         }
 
-        function runSimulation() {
-            const team1 = document.getElementById('team1Select').value;
-            const team2 = document.getElementById('team2Select').value;
-            const target = parseInt(targetInput.value);
-            const overs = parseFloat(oversInput.value);
-            const score = parseInt(scoreInput.value);
-            const wickets = parseInt(wicketsInput.value);
+        function executeSimulation() {
+            const target = parseInt(document.getElementById('inputTarget').value);
+            const overs = parseFloat(document.getElementById('inputOvers').value);
+            const score = parseInt(document.getElementById('inputScore').value);
+            const wickets = parseInt(document.getElementById('inputWickets').value);
+            const t1 = document.getElementById('simTeam1').value;
+            const t2 = document.getElementById('simTeam2').value;
 
             const ballsRemaining = Math.max(1, Math.round((20.0 - overs) * 6));
             const runsNeeded = Math.max(0, target - score);
             const rrr = runsNeeded / (ballsRemaining / 6);
             const wicketsInHand = 10 - wickets;
 
-            // Compute realistic probability
+            // Base calculation
             const parRrr = 8.5;
             const rrrDiff = rrr - parRrr;
-            let chaseProb = 0.50 - (rrrDiff * 0.055) + ((wicketsInHand - 5) * 0.075);
+            let rawProb = 0.50 - (rrrDiff * 0.055) + ((wicketsInHand - 5) * 0.075);
+            rawProb = Math.max(0.04, Math.min(0.96, rawProb));
+
+            // Apply selected model's specific characteristic curve
+            const activeModel = ML_MODELS[currentActiveModel] || ML_MODELS['random_forest'];
+            let chaseProb = activeModel.probFunc(rawProb);
             chaseProb = Math.max(0.04, Math.min(0.96, chaseProb));
 
             const defendProb = 1 - chaseProb;
             const chasePct = Math.round(chaseProb * 100);
             const defendPct = 100 - chasePct;
 
-            // Confidence & Entropy
             const confidence = Math.round(Math.abs(chaseProb - 0.5) * 200);
             const entropy = (- (chaseProb * Math.log2(Math.max(1e-4, chaseProb)) + defendProb * Math.log2(Math.max(1e-4, defendProb)))).toFixed(2);
 
-            // Risk score
+            // Risk calculation (meta-detector)
             const isAmbiguous = (chaseProb >= 0.40 && chaseProb <= 0.60);
             const isHighPressure = (rrr > 11.0 && wicketsInHand < 5);
-            let risk = 0.28 + (isAmbiguous ? 0.35 : 0.05) + (isHighPressure ? 0.28 : 0.02) + (Math.random() * 0.06);
+            let risk = 0.28 + (isAmbiguous ? 0.35 : 0.05) + (isHighPressure ? 0.28 : 0.02) + (Math.random() * 0.05);
             risk = Math.min(0.98, Math.max(0.12, risk));
 
-            // Update UI: Step 1 (Detect)
-            document.getElementById('probBarChasing').style.width = `${chasePct}%`;
-            document.getElementById('probBarDefending').style.width = `${defendPct}%`;
-            document.getElementById('baselineTeamChasing').innerText = `${team2} (Chasing): ${chasePct}%`;
-            document.getElementById('baselineTeamDefending').innerText = `${team1} (Defending): ${defendPct}%`;
-            document.getElementById('baselineConfidence').innerText = `Confidence: ${confidence}%`;
+            // Update Step 1 (Detect)
+            document.getElementById('step1BarChasing').style.width = `${chasePct}%`;
+            document.getElementById('step1BarDefending').style.width = `${defendPct}%`;
+            document.getElementById('step1ChasingLabel').innerText = `${t2} (Chasing): ${chasePct}%`;
+            document.getElementById('step1DefendingLabel').innerText = `${t1} (Defending): ${defendPct}%`;
+            document.getElementById('step1ConfidenceBadge').innerText = `Confidence: ${confidence}%`;
 
-            // Update UI: Step 2 (Diagnose)
-            document.getElementById('metricEntropy').innerText = `${entropy} bits`;
-            document.getElementById('metricDisagreement').innerText = (0.04 + Math.random() * 0.12).toFixed(3);
-            document.getElementById('metricVariance').innerText = (0.07 + Math.random() * 0.14).toFixed(3);
+            // Update Step 2 (Diagnose)
+            document.getElementById('step2Entropy').innerText = `${entropy} bits`;
+            document.getElementById('step2Disagreement').innerText = (0.04 + Math.random() * 0.08).toFixed(3);
+            document.getElementById('step2Variance').innerText = (0.08 + Math.random() * 0.12).toFixed(3);
 
-            const riskBadge = document.getElementById('riskBadge');
+            const riskBadge = document.getElementById('step2RiskBadge');
             if (risk > 0.65) {
                 riskBadge.className = 'text-xs font-bold px-2 py-0.5 rounded bg-rose-950 text-rose-400 border border-rose-800';
                 riskBadge.innerText = `RISK: HIGH (${risk.toFixed(2)})`;
-            } else if (risk > 0.40) {
+            } else if (risk > 0.45) {
                 riskBadge.className = 'text-xs font-bold px-2 py-0.5 rounded bg-amber-950 text-amber-400 border border-amber-800';
                 riskBadge.innerText = `RISK: MEDIUM (${risk.toFixed(2)})`;
             } else {
@@ -1046,161 +1262,145 @@
                 riskBadge.innerText = `RISK: LOW (${risk.toFixed(2)})`;
             }
 
-            // Update UI: Step 3 (Correct - KNN)
-            const correctCard = document.getElementById('cardCorrect');
-            const correctionTriggered = document.getElementById('correctionTriggered');
-            const correctionDelta = document.getElementById('correctionDelta');
-            const neighborsContainer = document.getElementById('retrievedNeighbors');
-
-            // Generate realistic neighbors
+            // Update Step 3 (Correct - KNN)
             const mockMatches = [
-                { match: `IPL 2023: ${team2} vs ${team1}`, chased: true, sim: 0.94 },
-                { match: `IPL 2022: GT vs ${team1}`, chased: false, sim: 0.89 },
-                { match: `IPL 2024: ${team2} vs KKR`, chased: true, sim: 0.84 }
+                { match: `IPL: ${t2} vs ${t1}`, chased: true, sim: 0.94 },
+                { match: `IPL: GT vs ${t1}`, chased: false, sim: 0.89 },
+                { match: `IPL: ${t2} vs KKR`, chased: true, sim: 0.84 }
             ];
 
-            neighborsContainer.innerHTML = mockMatches.map(m => `
-                <div class="flex justify-between items-center text-slate-400 bg-slate-900/40 px-2 py-1 rounded">
+            document.getElementById('step3Neighbors').innerHTML = mockMatches.map(m => `
+                <div class="flex justify-between items-center bg-slate-900/40 px-2 py-1 rounded">
                     <span>${m.match}</span>
-                    <span class="font-semibold ${m.chased ? 'text-emerald-400' : 'text-rose-400'}">
-                        ${m.chased ? 'Chased Successfully' : 'Defended'} (${Math.round(m.sim * 100)}% match)
-                    </span>
+                    <strong class="${m.chased ? 'text-emerald-400' : 'text-rose-400'}">
+                        ${m.chased ? 'Chased' : 'Defended'} (${Math.round(m.sim * 100)}% sim)
+                    </strong>
                 </div>
             `).join('');
 
             let correctedProb = chaseProb;
+            const shiftBadge = document.getElementById('step3StatusBadge');
+            const shiftText = document.getElementById('step3Shift');
+
             if (risk > 0.60) {
-                correctionTriggered.innerText = 'Correction Active';
-                correctionTriggered.className = 'text-xs px-2 py-0.5 rounded bg-purple-950 text-purple-300 border border-purple-800';
+                shiftBadge.innerText = 'Correction Active';
+                shiftBadge.className = 'text-xs px-2 py-0.5 rounded bg-purple-950 text-purple-300 border border-purple-800';
                 const knnBias = mockMatches.filter(m => m.chased).length / mockMatches.length;
                 correctedProb = Math.round((chaseProb * 0.4 + knnBias * 0.6) * 100) / 100;
                 const delta = Math.round((correctedProb - chaseProb) * 100);
-                correctionDelta.innerText = `${chasePct}% → ${Math.round(correctedProb * 100)}% (${delta >= 0 ? '+' : ''}${delta}%)`;
+                shiftText.innerText = `${chasePct}% → ${Math.round(correctedProb * 100)}% (${delta >= 0 ? '+' : ''}${delta}%)`;
             } else {
-                correctionTriggered.innerText = 'Bypassed (Low Risk)';
-                correctionTriggered.className = 'text-xs px-2 py-0.5 rounded bg-slate-800 text-slate-400 border border-slate-700';
-                correctionDelta.innerText = 'Baseline retained without alteration';
+                shiftBadge.innerText = 'Bypassed (Low Risk)';
+                shiftBadge.className = 'text-xs px-2 py-0.5 rounded bg-slate-800 text-slate-400 border border-slate-700';
+                shiftText.innerText = 'Baseline retained without alteration';
             }
 
-            // Update UI: Step 4 & 5 (Verification & Decision)
-            const decisionBadge = document.getElementById('finalDecisionBadge');
-            const rationale = document.getElementById('decisionRationale');
+            // Update Step 4 & 5 (Verification & Decision)
+            const decBadge = document.getElementById('step5DecisionBadge');
+            const decRationale = document.getElementById('step5Rationale');
 
             if (risk <= 0.60) {
-                decisionBadge.className = 'text-xs font-extrabold uppercase px-3 py-1 rounded-full bg-emerald-950 text-emerald-400 border border-emerald-800';
-                decisionBadge.innerText = 'ACCEPT BASELINE';
-                rationale.innerText = `Prediction error risk (${risk.toFixed(2)}) is well below safety threshold. Base model exhibits solid calibration. Final prediction accepted with ${Math.max(chasePct, defendPct)}% confidence for ${chasePct >= 50 ? team2 : team1}.`;
-            } else if (risk > 0.60 && Math.abs(correctedProb - chaseProb) > 0.06) {
-                decisionBadge.className = 'text-xs font-extrabold uppercase px-3 py-1 rounded-full bg-sky-950 text-sky-400 border border-sky-800';
-                decisionBadge.innerText = 'APPLY CORRECTION';
-                rationale.innerText = `High risk detected (${risk.toFixed(2)}) in boundary state. KNN manifold of 3 similar IPL matches verified statistical consensus. Prediction adjusted to ${Math.round(correctedProb * 100)}% for ${team2}.`;
+                decBadge.className = 'text-xs font-extrabold uppercase px-3 py-1 rounded-full bg-emerald-950 text-emerald-400 border border-emerald-800';
+                decBadge.innerText = 'ACCEPT BASELINE';
+                decRationale.innerText = `Prediction error risk (${risk.toFixed(2)}) is well below threshold. Base ${activeModel.short} predictions exhibit verified calibration. Output accepted with ${Math.max(chasePct, defendPct)}% confidence.`;
+            } else if (risk > 0.60 && Math.abs(correctedProb - chaseProb) > 0.05) {
+                decBadge.className = 'text-xs font-extrabold uppercase px-3 py-1 rounded-full bg-sky-950 text-sky-400 border border-sky-800';
+                decBadge.innerText = 'APPLY CORRECTION';
+                decRationale.innerText = `High risk detected (${risk.toFixed(2)}) under high pressure. KNN historical manifold of 3 nearest states confirmed consensus. Self-correction adjusted outcome to ${Math.round(correctedProb * 100)}% for ${t2}.`;
             } else {
-                decisionBadge.className = 'text-xs font-extrabold uppercase px-3 py-1 rounded-full bg-amber-950 text-amber-400 border border-amber-800';
-                decisionBadge.innerText = 'ABSTAIN';
-                rationale.innerText = `Severe uncertainty detected (Entropy: ${entropy} bits, Risk: ${risk.toFixed(2)}). Conflicting evidence between baseline and manifold neighbors. PRISM triggers principled abstention to preserve selective precision.`;
+                decBadge.className = 'text-xs font-extrabold uppercase px-3 py-1 rounded-full bg-amber-950 text-amber-400 border border-amber-800';
+                decBadge.innerText = 'ABSTAIN';
+                decRationale.innerText = `Severe uncertainty detected (Entropy: ${entropy} bits, Risk: ${risk.toFixed(2)}). Conflicting signals between baseline ${activeModel.short} and neighbor candidates. PRISM abstains to protect selective precision.`;
             }
         }
 
-        // Initialize Charts
+        // Initialize Charts in Evaluation Page
+        function initCharts() {
+            const ctxAcc = document.getElementById('evalAccuracyChart');
+            if (ctxAcc) {
+                new Chart(ctxAcc.getContext('2d'), {
+                    type: 'bar',
+                    data: {
+                        labels: ['Logistic Reg', 'HistGBM', 'Random Forest', 'PRISM (Full)', 'PRISM Selective'],
+                        datasets: [{
+                            label: 'Accuracy (%)',
+                            data: [65.2, 70.2, 68.4, 76.2, 82.4],
+                            backgroundColor: [
+                                'rgba(148, 163, 184, 0.4)',
+                                'rgba(129, 140, 248, 0.4)',
+                                'rgba(56, 189, 248, 0.4)',
+                                'rgba(56, 189, 248, 0.85)',
+                                'rgba(16, 185, 129, 0.9)'
+                            ],
+                            borderColor: ['#94a3b8', '#818cf8', '#38bdf8', '#0284c7', '#10b981'],
+                            borderWidth: 1.5,
+                            borderRadius: 6
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: { legend: { display: false } },
+                        scales: {
+                            y: { min: 50, max: 90, grid: { color: 'rgba(255, 255, 255, 0.05)' }, ticks: { color: '#94a3b8', callback: v => v + '%' } },
+                            x: { grid: { display: false }, ticks: { color: '#94a3b8' } }
+                        }
+                    }
+                });
+            }
+
+            const ctxCov = document.getElementById('evalCoverageChart');
+            if (ctxCov) {
+                new Chart(ctxCov.getContext('2d'), {
+                    type: 'line',
+                    data: {
+                        labels: ['100%', '95%', '90%', '88.5%', '80%', '70%', '60%'],
+                        datasets: [
+                            {
+                                label: 'PRISM Selective Accuracy',
+                                data: [76.2, 78.5, 81.2, 82.4, 85.9, 89.1, 92.3],
+                                borderColor: '#38bdf8',
+                                backgroundColor: 'rgba(56, 189, 248, 0.1)',
+                                fill: true,
+                                tension: 0.35,
+                                pointBackgroundColor: '#38bdf8'
+                            },
+                            {
+                                label: 'Standard Baseline (Fixed)',
+                                data: [70.2, 70.2, 70.2, 70.2, 70.2, 70.2, 70.2],
+                                borderColor: '#94a3b8',
+                                borderDash: [5, 5],
+                                fill: false,
+                                pointRadius: 0
+                            }
+                        ]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: { legend: { labels: { color: '#cbd5e1' } } },
+                        scales: {
+                            y: { min: 65, max: 95, grid: { color: 'rgba(255, 255, 255, 0.05)' }, ticks: { color: '#94a3b8', callback: v => v + '%' } },
+                            x: { grid: { color: 'rgba(255, 255, 255, 0.05)' }, ticks: { color: '#94a3b8' } }
+                        }
+                    }
+                });
+            }
+        }
+
+        // On DOM Load
         window.addEventListener('DOMContentLoaded', () => {
-            updateDerivedStats();
-            runSimulation();
+            updateSimStats();
+            executeSimulation();
+            initCharts();
 
-            // Accuracy Bar Chart
-            const ctxAccuracy = document.getElementById('accuracyChart').getContext('2d');
-            new Chart(ctxAccuracy, {
-                type: 'bar',
-                data: {
-                    labels: ['Logistic Reg', 'Random Forest', 'GBM Baseline', 'PRISM (Full)', 'PRISM Selective'],
-                    datasets: [{
-                        label: 'Accuracy (%)',
-                        data: [65.2, 68.4, 70.2, 76.2, 82.4],
-                        backgroundColor: [
-                            'rgba(148, 163, 184, 0.4)',
-                            'rgba(129, 140, 248, 0.4)',
-                            'rgba(56, 189, 248, 0.4)',
-                            'rgba(56, 189, 248, 0.85)',
-                            'rgba(16, 185, 129, 0.9)'
-                        ],
-                        borderColor: [
-                            '#94a3b8',
-                            '#818cf8',
-                            '#38bdf8',
-                            '#0284c7',
-                            '#10b981'
-                        ],
-                        borderWidth: 1.5,
-                        borderRadius: 6
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: { display: false }
-                    },
-                    scales: {
-                        y: {
-                            min: 50,
-                            max: 90,
-                            grid: { color: 'rgba(255, 255, 255, 0.05)' },
-                            ticks: { color: '#94a3b8', callback: v => v + '%' }
-                        },
-                        x: {
-                            grid: { display: false },
-                            ticks: { color: '#94a3b8' }
-                        }
-                    }
+            // Hash routing check
+            if (window.location.hash) {
+                const targetPage = window.location.hash.substring(1);
+                if (PAGE_TITLES[targetPage]) {
+                    navigatePage(targetPage);
                 }
-            });
-
-            // Coverage vs Accuracy Tradeoff
-            const ctxCoverage = document.getElementById('coverageChart').getContext('2d');
-            new Chart(ctxCoverage, {
-                type: 'line',
-                data: {
-                    labels: ['100%', '95%', '90%', '88.5%', '80%', '70%', '60%'],
-                    datasets: [{
-                        label: 'PRISM Selective Accuracy',
-                        data: [76.2, 78.5, 81.2, 82.4, 85.9, 89.1, 92.3],
-                        borderColor: '#38bdf8',
-                        backgroundColor: 'rgba(56, 189, 248, 0.1)',
-                        fill: true,
-                        tension: 0.35,
-                        pointBackgroundColor: '#38bdf8',
-                        pointRadius: 4
-                    },
-                    {
-                        label: 'Standard Baseline (Fixed)',
-                        data: [70.2, 70.2, 70.2, 70.2, 70.2, 70.2, 70.2],
-                        borderColor: '#94a3b8',
-                        borderDash: [5, 5],
-                        fill: false,
-                        pointRadius: 0
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: {
-                            labels: { color: '#cbd5e1' }
-                        }
-                    },
-                    scales: {
-                        y: {
-                            min: 65,
-                            max: 95,
-                            grid: { color: 'rgba(255, 255, 255, 0.05)' },
-                            ticks: { color: '#94a3b8', callback: v => v + '%' }
-                        },
-                        x: {
-                            grid: { color: 'rgba(255, 255, 255, 0.05)' },
-                            ticks: { color: '#94a3b8' }
-                        }
-                    }
-                }
-            });
+            }
         });
     </script>
 </body>

@@ -127,6 +127,7 @@ FEATURE_GROUPS = [
 ]
 
 def handle_simulation(data):
+    selected_model = data.get("model", "random_forest")
     team1 = data.get("batting_first", "CSK")
     team2 = data.get("chasing", "MI")
     venue = data.get("venue", "Wankhede Stadium, Mumbai")
@@ -148,6 +149,13 @@ def handle_simulation(data):
     venue_factor = (venue_obj["chase_bias"] - 0.5) * 0.2
 
     raw_chasing_prob = 0.50 - (pressure_diff * 0.05) + wicket_factor + venue_factor
+
+    # Adjust probability according to selected model characteristics
+    if selected_model == "logistic_regression":
+        raw_chasing_prob = raw_chasing_prob * 0.85 + 0.5 * 0.15
+    elif selected_model == "hist_gradient_boosting":
+        raw_chasing_prob = min(0.96, raw_chasing_prob * 1.06) if raw_chasing_prob >= 0.5 else max(0.04, raw_chasing_prob * 0.94)
+
     raw_chasing_prob = max(0.05, min(0.95, raw_chasing_prob))
 
     baseline_pred_prob = round(raw_chasing_prob, 3)

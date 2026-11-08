@@ -1,16 +1,7 @@
-"""
-PRISM Pipeline Execution Entrypoint
-Run: python scripts/run_prism.py
-"""
+"""TODO: Implement and test this PRISM component."""
 
-import sys
-from pathlib import Path
+def main():
+    raise NotImplementedError('Implementation pending')
 
-PROJECT_ROOT = Path(__file__).resolve().parents[1]
-if str(PROJECT_ROOT) not in sys.path:
-    sys.path.insert(0, str(PROJECT_ROOT))
-
-from src.prism import main
-
-if __name__ == "__main__":
+if __name__ == '__main__':
     main()
