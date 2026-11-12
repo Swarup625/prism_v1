@@ -5,4 +5,7 @@ venv/
 .env
 .pytest_cache/
 
+# Unslop skill (local tooling, not for distribution)
+unslop/
+
 
