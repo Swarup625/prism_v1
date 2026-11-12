@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PRISM — Prediction Reliability & Intelligent Self-Correction</title>
+    <!-- Browser tab: Prism symbol only (32x32) -->
+    <link rel="icon" type="image/png" sizes="32x32" href="assets/prism-favicon.png">
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Chart.js -->
@@ -170,10 +172,10 @@
 
     <!-- LEFT VERTICAL SIDEBAR -->
     <aside id="sidebar" class="w-[72px] bg-ink-deep border-r border-ink-border flex flex-col shrink-0 fixed inset-y-0 left-0 z-40 transition-transform duration-200 md:translate-x-0 -translate-x-full">
-        <!-- Logo -->
+        <!-- Logo in Sidebar (Prism symbol only) -->
         <div class="h-14 flex items-center justify-center border-b border-ink-border">
             <div class="w-9 h-9 rounded-lg bg-ink-raised border border-ink-border p-1.5 flex items-center justify-center shadow-sm">
-                <img src="assets/prism-logo.png" alt="PRISM" class="w-full h-full object-contain" />
+                <img src="assets/prism-symbol.png" alt="PRISM" class="w-full h-full object-contain select-none" />
             </div>
         </div>
 
@@ -246,16 +248,19 @@
     <!-- MAIN VIEW AREA -->
     <div class="flex-1 md:pl-[72px] flex flex-col min-h-screen">
 
-        <!-- Top Header Bar -->
+        <!-- Top Header Bar (Navbar: Icon 28-32px + PRISM wordmark) -->
         <header class="h-14 border-b border-ink-border px-4 sm:px-6 flex items-center justify-between bg-ink-base sticky top-0 z-30">
             <div class="flex items-center gap-3">
                 <button onclick="toggleSidebar()" class="md:hidden text-text-secondary hover:text-text-primary p-1">
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 12h18M3 6h18M3 18h18"/></svg>
                 </button>
-                <div class="flex items-center gap-2 text-xs">
-                    <span class="text-text-muted">PRISM</span>
+                <div class="flex items-center gap-2.5">
+                    <!-- Navbar Logo: 28-32px icon -->
+                    <img src="assets/prism-symbol.png" alt="PRISM Icon" class="w-7 h-7 sm:w-8 sm:h-8 object-contain select-none" />
+                    <!-- PRISM wordmark -->
+                    <span class="font-bold text-sm sm:text-base tracking-tight text-text-primary font-mono">PRISM</span>
                     <span class="text-text-muted opacity-40">/</span>
-                    <span id="topBarTitle" class="text-text-primary font-medium">Overview</span>
+                    <span id="topBarTitle" class="text-text-secondary text-xs font-medium">Overview</span>
                 </div>
             </div>
             <div class="flex items-center gap-3 text-xs">
@@ -281,9 +286,9 @@
             <!-- VIEW 1: OVERVIEW -->
             <!-- =============================================================== -->
             <section id="page-overview" class="page-view active relative space-y-10 overflow-hidden">
-                <!-- Ambient PRISM project watermark with light intensity in the background -->
-                <div class="absolute -top-10 sm:-top-4 -right-12 sm:right-0 w-[320px] sm:w-[520px] lg:w-[620px] pointer-events-none select-none opacity-[0.08] dark:opacity-[0.14] transition-opacity duration-300 z-0 flex items-center justify-center">
-                    <img src="assets/prism-logo.png" alt="PRISM Project Logo" class="w-full h-auto object-contain select-none pointer-events-none" />
+                <!-- Hero background: Prism symbol only (280-350px) with light intensity, fully visible without cutoff -->
+                <div class="absolute top-2 right-4 sm:right-12 w-[280px] sm:w-[340px] h-[280px] sm:h-[340px] pointer-events-none select-none opacity-[0.10] dark:opacity-[0.18] transition-opacity duration-300 z-0 flex items-center justify-center">
+                    <img src="assets/prism-symbol.png" alt="PRISM Symbol" class="w-full h-full object-contain select-none pointer-events-none" />
                 </div>
 
                 <div class="relative z-10 space-y-10">
@@ -471,8 +476,8 @@
                         <div class="flex items-center gap-4 sm:gap-8 justify-center flex-wrap sm:flex-nowrap">
                             <!-- Team 1 Card (Batting First) -->
                             <div class="flex flex-col items-center gap-3">
-                                <div id="team1LogoBox" class="w-32 h-32 sm:w-40 sm:h-40 rounded-2xl bg-ink-card/90 border border-ink-border p-3 flex items-center justify-center shadow-lg transition-all duration-300 hover:scale-105">
-                                    <img id="team1LogoImg" src="assets/logos/CSK.png" alt="CSK" class="w-full h-full object-contain filter drop-shadow-md select-none" />
+                                <div id="team1LogoBox" class="w-32 h-32 sm:w-40 sm:h-40 rounded-2xl bg-ink-card/90 border border-ink-border p-3 flex items-center justify-center shadow-lg transition-all duration-300 hover:scale-105 overflow-hidden">
+                                    <img id="team1LogoImg" src="assets/logos/CSK.png" alt="CSK" class="max-w-full max-h-full w-auto h-auto object-contain filter drop-shadow-md select-none" />
                                 </div>
                                 <div class="text-center">
                                     <span id="team1NameText" class="font-medium text-xs sm:text-sm text-text-primary block">Chennai Super Kings</span>
@@ -501,8 +506,8 @@
 
                             <!-- Team 2 Card (Chasing Side) -->
                             <div class="flex flex-col items-center gap-3">
-                                <div id="team2LogoBox" class="w-32 h-32 sm:w-40 sm:h-40 rounded-2xl bg-ink-card/90 border border-ink-border p-3 flex items-center justify-center shadow-lg transition-all duration-300 hover:scale-105">
-                                    <img id="team2LogoImg" src="assets/logos/MI.png" alt="MI" class="w-full h-full object-contain filter drop-shadow-md select-none" />
+                                <div id="team2LogoBox" class="w-32 h-32 sm:w-40 sm:h-40 rounded-2xl bg-ink-card/90 border border-ink-border p-3 flex items-center justify-center shadow-lg transition-all duration-300 hover:scale-105 overflow-hidden">
+                                    <img id="team2LogoImg" src="assets/logos/MI.png" alt="MI" class="max-w-full max-h-full w-auto h-auto object-contain filter drop-shadow-md select-none" />
                                 </div>
                                 <div class="text-center">
                                     <span id="team2NameText" class="font-medium text-xs sm:text-sm text-text-primary block">Mumbai Indians</span>
@@ -1008,9 +1013,12 @@
 
         </main>
 
-        <!-- Footer credit -->
-        <footer class="text-center text-[10px] text-text-muted py-3 border-t border-ink-border font-mono">
-            Design refined with <a href="https://heydamir.design/unslop" target="_blank" class="hover:text-text-secondary transition-colors">unslop</a> by Damir Sokolovsky
+        <!-- Footer (Full PRISM Logo + Tagline 150-200px wide & credit) -->
+        <footer class="text-center py-6 border-t border-ink-border flex flex-col items-center justify-center gap-2.5">
+            <img src="assets/prism-full-logo.png" alt="PRISM — Prediction Reliability & Intelligent Self-Correction Mechanism" class="w-44 sm:w-48 max-w-[200px] h-auto object-contain opacity-80 hover:opacity-100 transition-opacity select-none" />
+            <div class="text-[10px] text-text-muted font-mono">
+                Design refined with <a href="https://heydamir.design/unslop" target="_blank" class="hover:text-text-secondary transition-colors underline decoration-dotted">unslop</a> by Damir Sokolovsky
+            </div>
         </footer>
     </div>
 
