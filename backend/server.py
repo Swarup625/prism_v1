@@ -353,6 +353,17 @@ class PRISMRequestHandler(http.server.SimpleHTTPRequestHandler):
             if file_path.exists() and file_path.is_file():
                 content = file_path.read_bytes()
                 self.send_response(200)
+                ext = file_path.suffix.lower()
+                if ext == ".png":
+                    self.send_header("Content-Type", "image/png")
+                elif ext in [".jpg", ".jpeg"]:
+                    self.send_header("Content-Type", "image/jpeg")
+                elif ext == ".svg":
+                    self.send_header("Content-Type", "image/svg+xml")
+                elif ext == ".css":
+                    self.send_header("Content-Type", "text/css")
+                elif ext == ".js":
+                    self.send_header("Content-Type", "application/javascript")
                 self.send_header("Content-Length", str(len(content)))
                 self.send_cors_headers()
                 self.end_headers()

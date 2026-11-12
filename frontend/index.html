@@ -131,7 +131,7 @@
         .dual-input-row { display: flex; align-items: center; gap: 8px; }
         .dual-input-row input[type="range"] { flex: 1; }
         .dual-input-row input[type="number"] {
-            width: 64px; text-align: center;
+            width: 68px; text-align: center;
             background: var(--c-raised); border: 1px solid var(--c-border);
             border-radius: 6px; padding: 4px 6px;
             color: var(--c-text-primary); font-family: 'JetBrains Mono', monospace;
@@ -140,21 +140,11 @@
         .dual-input-row input[type="number"]:focus {
             outline: none; border-color: #22d3ee;
         }
-        /* Remove number input spinners */
         .dual-input-row input[type="number"]::-webkit-outer-spin-button,
         .dual-input-row input[type="number"]::-webkit-inner-spin-button {
             -webkit-appearance: none; margin: 0;
         }
         .dual-input-row input[type="number"] { -moz-appearance: textfield; }
-
-        /* Team logo containers */
-        .team-logo-circle {
-            width: 56px; height: 56px; border-radius: 50%;
-            display: flex; align-items: center; justify-content: center;
-            font-weight: 600; font-size: 16px; font-family: 'JetBrains Mono', monospace;
-            border: 2px solid var(--c-border);
-            flex-shrink: 0;
-        }
 
         /* Slider accent */
         input[type="range"] { accent-color: #22d3ee; }
@@ -182,7 +172,9 @@
     <aside id="sidebar" class="w-[72px] bg-ink-deep border-r border-ink-border flex flex-col shrink-0 fixed inset-y-0 left-0 z-40 transition-transform duration-200 md:translate-x-0 -translate-x-full">
         <!-- Logo -->
         <div class="h-14 flex items-center justify-center border-b border-ink-border">
-            <div class="w-8 h-8 rounded-lg bg-ink-raised border border-ink-border flex items-center justify-center font-mono text-sm font-semibold" style="color:#22d3ee;">P</div>
+            <div class="w-9 h-9 rounded-lg bg-ink-raised border border-ink-border p-1.5 flex items-center justify-center shadow-sm">
+                <img src="assets/prism-logo.png" alt="PRISM" class="w-full h-full object-contain" />
+            </div>
         </div>
 
         <!-- Icon Navigation -->
@@ -288,84 +280,91 @@
             <!-- =============================================================== -->
             <!-- VIEW 1: OVERVIEW -->
             <!-- =============================================================== -->
-            <section id="page-overview" class="page-view active space-y-10">
-                <!-- Hero -->
-                <div class="max-w-3xl pt-4">
-                    <span class="text-xs font-mono text-text-muted mb-3 block">Research benchmark</span>
-                    <h1 class="headline-editorial text-4xl sm:text-5xl lg:text-[56px] text-text-primary leading-[1.06] mb-5">
-                        Prediction reliability and intelligent self-correction
-                    </h1>
-                    <p class="text-text-secondary text-[15px] leading-relaxed mb-6 max-w-2xl">
-                        A closed-loop audit framework for machine learning systems facing volatile distribution shifts. Tested on ball-by-ball IPL cricket second-innings dynamics, moving beyond point predictions to explicit error diagnosis, historical manifold retrieval, and multi-evidence verification.
-                    </p>
-                    <div class="flex items-center gap-3 text-xs">
-                        <button onclick="navigatePage('simulator')" class="px-4 py-2.5 rounded-lg bg-text-primary text-ink-base font-medium hover:opacity-90 transition-opacity">
-                            Launch match simulator
-                        </button>
-                        <button onclick="navigatePage('pipeline')" class="px-4 py-2.5 rounded-lg bg-ink-card hover:bg-ink-raised border border-ink-border text-text-primary transition-colors">
-                            Read pipeline architecture
-                        </button>
-                    </div>
+            <section id="page-overview" class="page-view active relative space-y-10 overflow-hidden">
+                <!-- Ambient PRISM project watermark with light intensity in the background -->
+                <div class="absolute -top-10 sm:-top-4 -right-12 sm:right-0 w-[320px] sm:w-[520px] lg:w-[620px] pointer-events-none select-none opacity-[0.08] dark:opacity-[0.14] transition-opacity duration-300 z-0 flex items-center justify-center">
+                    <img src="assets/prism-logo.png" alt="PRISM Project Logo" class="w-full h-auto object-contain select-none pointer-events-none" />
                 </div>
 
-                <!-- Key benchmark results -->
-                <div>
-                    <h2 class="text-xs font-mono text-text-muted mb-3">Key benchmark results (out-of-time test sets)</h2>
-                    <div class="grid grid-cols-2 lg:grid-cols-4 gap-3">
-                        <div class="p-4 rounded-xl bg-ink-card border border-ink-border">
-                            <span class="text-xs text-text-muted block mb-1">Net accuracy gain</span>
-                            <div class="font-mono text-2xl font-semibold text-text-primary" style="font-variant-numeric:tabular-nums">+7.8%</div>
-                            <span class="text-[11px] text-text-secondary mt-1 block">vs best single baseline</span>
-                        </div>
-                        <div class="p-4 rounded-xl bg-ink-card border border-ink-border">
-                            <span class="text-xs text-text-muted block mb-1">Selective accuracy</span>
-                            <div class="font-mono text-2xl font-semibold" style="color:#4cc38a;font-variant-numeric:tabular-nums">82.4%</div>
-                            <span class="text-[11px] text-text-secondary mt-1 block">at 88.5% coverage</span>
-                        </div>
-                        <div class="p-4 rounded-xl bg-ink-card border border-ink-border">
-                            <span class="text-xs text-text-muted block mb-1">Harm prevention</span>
-                            <div class="font-mono text-2xl font-semibold text-text-primary" style="font-variant-numeric:tabular-nums">92.4%</div>
-                            <span class="text-[11px] text-text-secondary mt-1 block">verified gate pass rate</span>
-                        </div>
-                        <div class="p-4 rounded-xl bg-ink-card border border-ink-border">
-                            <span class="text-xs text-text-muted block mb-1">State manifold</span>
-                            <div class="font-mono text-2xl font-semibold text-text-primary" style="font-variant-numeric:tabular-nums">8,665</div>
-                            <span class="text-[11px] text-text-secondary mt-1 block">indexed match states</span>
+                <div class="relative z-10 space-y-10">
+                    <!-- Hero -->
+                    <div class="max-w-3xl pt-4">
+                        <span class="text-xs font-mono text-text-muted mb-3 block">Research benchmark</span>
+                        <h1 class="headline-editorial text-4xl sm:text-5xl lg:text-[56px] text-text-primary leading-[1.06] mb-5">
+                            Prediction reliability and intelligent self-correction
+                        </h1>
+                        <p class="text-text-secondary text-[15px] leading-relaxed mb-6 max-w-2xl">
+                            A closed-loop audit framework for machine learning systems facing volatile distribution shifts. Tested on ball-by-ball IPL cricket second-innings dynamics, moving beyond point predictions to explicit error diagnosis, historical manifold retrieval, and multi-evidence verification.
+                        </p>
+                        <div class="flex items-center gap-3 text-xs">
+                            <button onclick="navigatePage('simulator')" class="px-4 py-2.5 rounded-lg bg-text-primary text-ink-base font-medium hover:opacity-90 transition-opacity">
+                                Launch match simulator
+                            </button>
+                            <button onclick="navigatePage('pipeline')" class="px-4 py-2.5 rounded-lg bg-ink-card hover:bg-ink-raised border border-ink-border text-text-primary transition-colors">
+                                Read pipeline architecture
+                            </button>
                         </div>
                     </div>
-                </div>
 
-                <!-- Pipeline overview diagram -->
-                <div class="p-6 rounded-xl bg-ink-card border border-ink-border">
-                    <div class="flex items-center justify-between pb-4 border-b border-ink-border mb-4">
-                        <h3 class="text-sm font-medium text-text-primary">Closed-loop decision pipeline</h3>
-                        <button onclick="navigatePage('pipeline')" class="text-xs text-text-muted hover:text-text-primary transition-colors">Details &rarr;</button>
+                    <!-- Key benchmark results -->
+                    <div>
+                        <h2 class="text-xs font-mono text-text-muted mb-3">Key benchmark results (out-of-time test sets)</h2>
+                        <div class="grid grid-cols-2 lg:grid-cols-4 gap-3">
+                            <div class="p-4 rounded-xl bg-ink-card border border-ink-border">
+                                <span class="text-xs text-text-muted block mb-1">Net accuracy gain</span>
+                                <div class="font-mono text-2xl font-semibold text-text-primary" style="font-variant-numeric:tabular-nums">+7.8%</div>
+                                <span class="text-[11px] text-text-secondary mt-1 block">vs best single baseline</span>
+                            </div>
+                            <div class="p-4 rounded-xl bg-ink-card border border-ink-border">
+                                <span class="text-xs text-text-muted block mb-1">Selective accuracy</span>
+                                <div class="font-mono text-2xl font-semibold" style="color:#4cc38a;font-variant-numeric:tabular-nums">82.4%</div>
+                                <span class="text-[11px] text-text-secondary mt-1 block">at 88.5% coverage</span>
+                            </div>
+                            <div class="p-4 rounded-xl bg-ink-card border border-ink-border">
+                                <span class="text-xs text-text-muted block mb-1">Harm prevention</span>
+                                <div class="font-mono text-2xl font-semibold text-text-primary" style="font-variant-numeric:tabular-nums">92.4%</div>
+                                <span class="text-[11px] text-text-secondary mt-1 block">verified gate pass rate</span>
+                            </div>
+                            <div class="p-4 rounded-xl bg-ink-card border border-ink-border">
+                                <span class="text-xs text-text-muted block mb-1">State manifold</span>
+                                <div class="font-mono text-2xl font-semibold text-text-primary" style="font-variant-numeric:tabular-nums">8,665</div>
+                                <span class="text-[11px] text-text-secondary mt-1 block">indexed match states</span>
+                            </div>
+                        </div>
                     </div>
-                    <div class="grid grid-cols-1 sm:grid-cols-5 gap-2 text-xs">
-                        <div class="p-3 rounded-lg bg-ink-deep border border-ink-border">
-                            <span class="font-mono text-text-muted block text-[10px] mb-1">Stage 01</span>
-                            <strong class="text-text-primary block font-medium">Detect</strong>
-                            <span class="text-[11px] text-text-secondary mt-1 block">Baseline probability calculation</span>
+
+                    <!-- Pipeline overview diagram -->
+                    <div class="p-6 rounded-xl bg-ink-card border border-ink-border">
+                        <div class="flex items-center justify-between pb-4 border-b border-ink-border mb-4">
+                            <h3 class="text-sm font-medium text-text-primary">Closed-loop decision pipeline</h3>
+                            <button onclick="navigatePage('pipeline')" class="text-xs text-text-muted hover:text-text-primary transition-colors">Details &rarr;</button>
                         </div>
-                        <div class="p-3 rounded-lg bg-ink-deep border border-ink-border">
-                            <span class="font-mono text-text-muted block text-[10px] mb-1">Stage 02</span>
-                            <strong class="text-text-primary block font-medium">Diagnose</strong>
-                            <span class="text-[11px] text-text-secondary mt-1 block">Entropy and error-risk meta-model</span>
-                        </div>
-                        <div class="p-3 rounded-lg bg-ink-deep border border-ink-border">
-                            <span class="font-mono text-text-muted block text-[10px] mb-1">Stage 03</span>
-                            <strong class="text-text-primary block font-medium">Correct</strong>
-                            <span class="text-[11px] text-text-secondary mt-1 block">Historical manifold KNN retrieval</span>
-                        </div>
-                        <div class="p-3 rounded-lg bg-ink-deep border border-ink-border">
-                            <span class="font-mono text-text-muted block text-[10px] mb-1">Stage 04</span>
-                            <strong class="text-text-primary block font-medium">Verify</strong>
-                            <span class="text-[11px] text-text-secondary mt-1 block">Multi-evidence harm gates</span>
-                        </div>
-                        <div class="p-3 rounded-lg bg-ink-deep border border-ink-border">
-                            <span class="font-mono text-text-muted block text-[10px] mb-1">Stage 05</span>
-                            <strong class="text-text-primary block font-medium">Decision</strong>
-                            <span class="text-[11px] text-text-secondary mt-1 block">Accept / Correct / Abstain</span>
+                        <div class="grid grid-cols-1 sm:grid-cols-5 gap-2 text-xs">
+                            <div class="p-3 rounded-lg bg-ink-deep border border-ink-border">
+                                <span class="font-mono text-text-muted block text-[10px] mb-1">Stage 01</span>
+                                <strong class="text-text-primary block font-medium">Detect</strong>
+                                <span class="text-[11px] text-text-secondary mt-1 block">Baseline probability calculation</span>
+                            </div>
+                            <div class="p-3 rounded-lg bg-ink-deep border border-ink-border">
+                                <span class="font-mono text-text-muted block text-[10px] mb-1">Stage 02</span>
+                                <strong class="text-text-primary block font-medium">Diagnose</strong>
+                                <span class="text-[11px] text-text-secondary mt-1 block">Entropy and error-risk meta-model</span>
+                            </div>
+                            <div class="p-3 rounded-lg bg-ink-deep border border-ink-border">
+                                <span class="font-mono text-text-muted block text-[10px] mb-1">Stage 03</span>
+                                <strong class="text-text-primary block font-medium">Correct</strong>
+                                <span class="text-[11px] text-text-secondary mt-1 block">Historical manifold KNN retrieval</span>
+                            </div>
+                            <div class="p-3 rounded-lg bg-ink-deep border border-ink-border">
+                                <span class="font-mono text-text-muted block text-[10px] mb-1">Stage 04</span>
+                                <strong class="text-text-primary block font-medium">Verify</strong>
+                                <span class="text-[11px] text-text-secondary mt-1 block">Multi-evidence harm gates</span>
+                            </div>
+                            <div class="p-3 rounded-lg bg-ink-deep border border-ink-border">
+                                <span class="font-mono text-text-muted block text-[10px] mb-1">Stage 05</span>
+                                <strong class="text-text-primary block font-medium">Decision</strong>
+                                <span class="text-[11px] text-text-secondary mt-1 block">Accept / Correct / Abstain</span>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -468,45 +467,59 @@
                     </div>
 
                     <div class="max-w-2xl mx-auto space-y-6">
-                        <!-- Team Logos + Selectors -->
-                        <div class="flex items-center gap-4 sm:gap-6 justify-center">
-                            <!-- Team 1 Logo -->
-                            <div class="flex flex-col items-center gap-2">
-                                <div id="team1Logo" class="team-logo-circle"></div>
-                                <select id="simTeam1" onchange="updateTeamLogos(); updateSimStats()" class="bg-ink-raised border border-ink-border rounded-lg px-3 py-2 text-sm text-text-primary focus:outline-none focus:border-cyan-500 w-36 text-center">
-                                    <option value="CSK" selected>CSK</option>
-                                    <option value="MI">MI</option>
-                                    <option value="RCB">RCB</option>
-                                    <option value="KKR">KKR</option>
-                                    <option value="GT">GT</option>
-                                    <option value="RR">RR</option>
-                                    <option value="SRH">SRH</option>
-                                    <option value="DC">DC</option>
-                                    <option value="PBKS">PBKS</option>
-                                    <option value="LSG">LSG</option>
+                        <!-- Team Logos + Selectors (Large 2-3x logos) -->
+                        <div class="flex items-center gap-4 sm:gap-8 justify-center flex-wrap sm:flex-nowrap">
+                            <!-- Team 1 Card (Batting First) -->
+                            <div class="flex flex-col items-center gap-3">
+                                <div id="team1LogoBox" class="w-32 h-32 sm:w-40 sm:h-40 rounded-2xl bg-ink-card/90 border border-ink-border p-3 flex items-center justify-center shadow-lg transition-all duration-300 hover:scale-105">
+                                    <img id="team1LogoImg" src="assets/logos/CSK.png" alt="CSK" class="w-full h-full object-contain filter drop-shadow-md select-none" />
+                                </div>
+                                <div class="text-center">
+                                    <span id="team1NameText" class="font-medium text-xs sm:text-sm text-text-primary block">Chennai Super Kings</span>
+                                    <span class="text-[10px] text-text-muted font-mono">Batting first</span>
+                                </div>
+                                <select id="simTeam1" onchange="updateTeamLogos(); updateSimStats()" class="bg-ink-raised border border-ink-border rounded-lg px-3 py-2 text-xs sm:text-sm text-text-primary focus:outline-none focus:border-cyan-500 w-36 sm:w-44 text-center cursor-pointer">
+                                    <option value="CSK" selected>CSK (Chennai)</option>
+                                    <option value="MI">MI (Mumbai)</option>
+                                    <option value="RCB">RCB (Bengaluru)</option>
+                                    <option value="KKR">KKR (Kolkata)</option>
+                                    <option value="GT">GT (Gujarat)</option>
+                                    <option value="RR">RR (Rajasthan)</option>
+                                    <option value="SRH">SRH (Hyderabad)</option>
+                                    <option value="DC">DC (Delhi)</option>
+                                    <option value="PBKS">PBKS (Punjab)</option>
+                                    <option value="LSG">LSG (Lucknow)</option>
                                 </select>
-                                <span class="text-[11px] text-text-muted">Batting first</span>
                             </div>
 
-                            <!-- VS -->
-                            <div class="text-text-muted font-mono text-lg font-semibold px-2">vs</div>
+                            <!-- VS Badge -->
+                            <div class="flex flex-col items-center justify-center px-1 my-2 sm:my-0">
+                                <div class="w-10 h-10 rounded-full bg-ink-raised border border-ink-border flex items-center justify-center font-mono text-xs font-bold text-text-muted shadow-sm">
+                                    VS
+                                </div>
+                            </div>
 
-                            <!-- Team 2 Logo -->
-                            <div class="flex flex-col items-center gap-2">
-                                <div id="team2Logo" class="team-logo-circle"></div>
-                                <select id="simTeam2" onchange="updateTeamLogos(); updateSimStats()" class="bg-ink-raised border border-ink-border rounded-lg px-3 py-2 text-sm text-text-primary focus:outline-none focus:border-cyan-500 w-36 text-center">
-                                    <option value="MI" selected>MI</option>
-                                    <option value="CSK">CSK</option>
-                                    <option value="RCB">RCB</option>
-                                    <option value="KKR">KKR</option>
-                                    <option value="GT">GT</option>
-                                    <option value="RR">RR</option>
-                                    <option value="SRH">SRH</option>
-                                    <option value="DC">DC</option>
-                                    <option value="PBKS">PBKS</option>
-                                    <option value="LSG">LSG</option>
+                            <!-- Team 2 Card (Chasing Side) -->
+                            <div class="flex flex-col items-center gap-3">
+                                <div id="team2LogoBox" class="w-32 h-32 sm:w-40 sm:h-40 rounded-2xl bg-ink-card/90 border border-ink-border p-3 flex items-center justify-center shadow-lg transition-all duration-300 hover:scale-105">
+                                    <img id="team2LogoImg" src="assets/logos/MI.png" alt="MI" class="w-full h-full object-contain filter drop-shadow-md select-none" />
+                                </div>
+                                <div class="text-center">
+                                    <span id="team2NameText" class="font-medium text-xs sm:text-sm text-text-primary block">Mumbai Indians</span>
+                                    <span class="text-[10px] text-text-muted font-mono">Chasing side</span>
+                                </div>
+                                <select id="simTeam2" onchange="updateTeamLogos(); updateSimStats()" class="bg-ink-raised border border-ink-border rounded-lg px-3 py-2 text-xs sm:text-sm text-text-primary focus:outline-none focus:border-cyan-500 w-36 sm:w-44 text-center cursor-pointer">
+                                    <option value="MI" selected>MI (Mumbai)</option>
+                                    <option value="CSK">CSK (Chennai)</option>
+                                    <option value="RCB">RCB (Bengaluru)</option>
+                                    <option value="KKR">KKR (Kolkata)</option>
+                                    <option value="GT">GT (Gujarat)</option>
+                                    <option value="RR">RR (Rajasthan)</option>
+                                    <option value="SRH">SRH (Hyderabad)</option>
+                                    <option value="DC">DC (Delhi)</option>
+                                    <option value="PBKS">PBKS (Punjab)</option>
+                                    <option value="LSG">LSG (Lucknow)</option>
                                 </select>
-                                <span class="text-[11px] text-text-muted">Chasing side</span>
                             </div>
                         </div>
 
@@ -596,21 +609,75 @@
                     </div>
                 </div>
 
-                <!-- PAGE 2: Results -->
-                <div id="simPage2" class="hidden">
-                    <div class="flex items-center gap-3 border-b border-ink-border pb-3 mb-6">
-                        <button onclick="showSimConditions()" class="text-text-muted hover:text-text-primary transition-colors p-1">
-                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
-                        </button>
-                        <div>
-                            <span class="text-xs font-mono text-text-muted block mb-0.5">PRISM audit result</span>
-                            <h2 class="headline-editorial text-2xl sm:text-3xl text-text-primary">Match state analysis</h2>
+                <!-- PAGE 2: Results with Two-Sided Split Background -->
+                <div id="simPage2" class="hidden relative rounded-2xl overflow-hidden border border-ink-border p-4 sm:p-6 transition-all duration-500">
+                    <!-- Ambient 2-sided split team background -->
+                    <div class="absolute inset-0 pointer-events-none flex z-0 overflow-hidden">
+                        <!-- Left half (Team 1 color) -->
+                        <div id="simSplitLeft" class="w-1/2 h-full transition-all duration-500 relative flex items-center justify-center overflow-hidden">
+                            <div id="simSplitLeftGrad" class="absolute inset-0"></div>
+                            <img id="simSplitLeftLogo" src="assets/logos/CSK.png" alt="" class="absolute opacity-[0.06] dark:opacity-[0.10] w-64 h-64 sm:w-96 sm:h-96 object-contain select-none pointer-events-none" />
                         </div>
+                        <!-- Right half (Team 2 color) -->
+                        <div id="simSplitRight" class="w-1/2 h-full transition-all duration-500 relative flex items-center justify-center overflow-hidden">
+                            <div id="simSplitRightGrad" class="absolute inset-0"></div>
+                            <img id="simSplitRightLogo" src="assets/logos/MI.png" alt="" class="absolute opacity-[0.06] dark:opacity-[0.10] w-64 h-64 sm:w-96 sm:h-96 object-contain select-none pointer-events-none" />
+                        </div>
+                        <!-- Center vertical split divider glow line -->
+                        <div class="absolute inset-y-0 left-1/2 w-[1px] bg-gradient-to-b from-transparent via-cyan-400/30 to-transparent"></div>
                     </div>
 
-                    <div class="space-y-4 text-xs">
-                        <!-- State Summary -->
-                        <div class="p-4 rounded-xl bg-ink-card border border-ink-border">
+                    <!-- Page 2 Content Overlay (relative z-10) -->
+                    <div class="relative z-10 space-y-4">
+                        <div class="flex items-center justify-between border-b border-ink-border pb-3 mb-2">
+                            <div class="flex items-center gap-3">
+                                <button onclick="showSimConditions()" class="text-text-muted hover:text-text-primary transition-colors p-1 rounded-lg bg-ink-card/80 border border-ink-border" title="Back to conditions">
+                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+                                </button>
+                                <div>
+                                    <span class="text-xs font-mono text-text-muted block mb-0.5">PRISM audit result</span>
+                                    <h2 class="headline-editorial text-2xl sm:text-3xl text-text-primary">Match state analysis</h2>
+                                </div>
+                            </div>
+                            <button onclick="showSimConditions()" class="text-xs px-3 py-1.5 rounded-lg bg-ink-card/90 hover:bg-ink-raised border border-ink-border text-text-primary transition-colors hidden sm:block">
+                                Edit conditions
+                            </button>
+                        </div>
+
+                        <!-- Match Showdown Header on Page 2 -->
+                        <div class="p-4 rounded-xl bg-ink-card/85 backdrop-blur-md border border-ink-border flex items-center justify-between gap-4">
+                            <!-- Left Team (Batting First) -->
+                            <div class="flex items-center gap-3">
+                                <div class="w-14 h-14 sm:w-16 sm:h-16 rounded-xl bg-ink-deep/60 p-1.5 flex items-center justify-center border border-ink-border shadow-md">
+                                    <img id="simResultTeam1Logo" src="assets/logos/CSK.png" alt="" class="w-full h-full object-contain" />
+                                </div>
+                                <div>
+                                    <span id="simResultTeam1Name" class="font-semibold text-sm sm:text-base text-text-primary block">Chennai Super Kings</span>
+                                    <span class="text-[10px] text-text-muted font-mono uppercase tracking-wider">Batting 1st</span>
+                                </div>
+                            </div>
+
+                            <!-- Center Status / Target -->
+                            <div class="text-center px-2">
+                                <div class="font-mono text-[10px] uppercase px-2 py-0.5 rounded bg-ink-deep border border-ink-border text-cyan-400 inline-block mb-0.5">Target score</div>
+                                <div id="simResultTargetDisplay" class="font-mono text-lg sm:text-2xl font-bold text-text-primary" style="font-variant-numeric:tabular-nums">185 runs</div>
+                                <div id="simResultVenueSub" class="text-[10px] text-text-muted truncate max-w-[130px] sm:max-w-[200px]">Wankhede Stadium</div>
+                            </div>
+
+                            <!-- Right Team (Chasing Side) -->
+                            <div class="flex items-center gap-3 flex-row-reverse text-right">
+                                <div class="w-14 h-14 sm:w-16 sm:h-16 rounded-xl bg-ink-deep/60 p-1.5 flex items-center justify-center border border-ink-border shadow-md">
+                                    <img id="simResultTeam2Logo" src="assets/logos/MI.png" alt="" class="w-full h-full object-contain" />
+                                </div>
+                                <div>
+                                    <span id="simResultTeam2Name" class="font-semibold text-sm sm:text-base text-text-primary block">Mumbai Indians</span>
+                                    <span class="text-[10px] text-text-muted font-mono uppercase tracking-wider">Chasing Target</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- State Summary Metrics Grid -->
+                        <div class="p-4 rounded-xl bg-ink-card/85 backdrop-blur-md border border-ink-border">
                             <div class="flex items-center justify-between border-b border-ink-border pb-2.5 mb-3">
                                 <div>
                                     <div id="simMatchHeader" class="text-sm font-medium text-text-primary">MI chasing 185 vs CSK</div>
@@ -622,19 +689,19 @@
                                 </div>
                             </div>
                             <div class="grid grid-cols-4 gap-2 text-center font-mono text-[11px]">
-                                <div class="p-2.5 bg-ink-deep rounded-lg border border-ink-border">
+                                <div class="p-2.5 bg-ink-deep/80 rounded-lg border border-ink-border">
                                     <span class="text-text-muted block text-[10px]">Balls left</span>
                                     <span id="simBallsLeft" class="text-text-primary">36</span>
                                 </div>
-                                <div class="p-2.5 bg-ink-deep rounded-lg border border-ink-border">
+                                <div class="p-2.5 bg-ink-deep/80 rounded-lg border border-ink-border">
                                     <span class="text-text-muted block text-[10px]">Runs needed</span>
                                     <span id="simRunsNeeded" class="text-text-primary">67</span>
                                 </div>
-                                <div class="p-2.5 bg-ink-deep rounded-lg border border-ink-border">
+                                <div class="p-2.5 bg-ink-deep/80 rounded-lg border border-ink-border">
                                     <span class="text-text-muted block text-[10px]">Current RR</span>
                                     <span id="simCRR" class="text-text-primary">8.43</span>
                                 </div>
-                                <div class="p-2.5 bg-ink-deep rounded-lg border border-ink-border">
+                                <div class="p-2.5 bg-ink-deep/80 rounded-lg border border-ink-border">
                                     <span class="text-text-muted block text-[10px]">Wickets in hand</span>
                                     <span id="simWicketsLeft" class="text-text-primary">6</span>
                                 </div>
@@ -642,7 +709,7 @@
                         </div>
 
                         <!-- Step 1: Baseline -->
-                        <div class="p-4 rounded-xl bg-ink-card border border-ink-border space-y-2">
+                        <div class="p-4 rounded-xl bg-ink-card/85 backdrop-blur-md border border-ink-border space-y-2">
                             <div class="flex items-center justify-between">
                                 <span class="font-medium text-text-primary" id="step1Title">Baseline estimate (Random Forest)</span>
                                 <span id="step1ConfidenceBadge" class="font-mono text-[11px] text-text-muted">Margin: 0.16</span>
@@ -660,12 +727,12 @@
                         </div>
 
                         <!-- Step 2: Risk Diagnosis -->
-                        <div class="p-4 rounded-xl bg-ink-card border border-ink-border space-y-2">
+                        <div class="p-4 rounded-xl bg-ink-card/85 backdrop-blur-md border border-ink-border space-y-2">
                             <div class="flex items-center justify-between">
                                 <span class="font-medium text-text-primary">Risk diagnosis (Meta-detector)</span>
                                 <span id="step2RiskBadge" class="font-mono text-[11px] px-2 py-0.5 rounded-md bg-ink-raised text-text-primary">Risk score: 0.54</span>
                             </div>
-                            <div class="grid grid-cols-3 gap-2 text-center font-mono text-[11px] bg-ink-deep p-2.5 rounded-lg border border-ink-border">
+                            <div class="grid grid-cols-3 gap-2 text-center font-mono text-[11px] bg-ink-deep/80 p-2.5 rounded-lg border border-ink-border">
                                 <div><span class="text-text-muted block text-[10px]">Entropy</span><span id="step2Entropy" class="text-text-primary">0.97 bits</span></div>
                                 <div><span class="text-text-muted block text-[10px]">Disagreement</span><span id="step2Disagreement" class="text-text-primary">0.068</span></div>
                                 <div><span class="text-text-muted block text-[10px]">Dispersion</span><span id="step2Variance" class="text-text-primary">0.112</span></div>
@@ -673,7 +740,7 @@
                         </div>
 
                         <!-- Step 3: Historical Manifold Retrieval -->
-                        <div class="p-4 rounded-xl bg-ink-card border border-ink-border space-y-2">
+                        <div class="p-4 rounded-xl bg-ink-card/85 backdrop-blur-md border border-ink-border space-y-2">
                             <div class="flex items-center justify-between">
                                 <span class="font-medium text-text-primary">Historical manifold evidence (K=50)</span>
                                 <span id="step3StatusBadge" class="font-mono text-[11px] text-text-muted">Candidate shift: +9.0%</span>
@@ -682,7 +749,7 @@
                         </div>
 
                         <!-- Decision -->
-                        <div class="p-5 rounded-xl bg-ink-card border border-ink-border space-y-2">
+                        <div class="p-5 rounded-xl bg-ink-card/85 backdrop-blur-md border border-ink-border space-y-2">
                             <div class="flex items-center justify-between">
                                 <span class="font-medium text-text-primary">Verification and decision</span>
                                 <span id="step5DecisionBadge" class="font-mono text-xs px-2.5 py-1 rounded-md bg-ink-raised font-semibold" style="color:#4cc38a">
@@ -694,7 +761,7 @@
                             </p>
                         </div>
 
-                        <button onclick="showSimConditions()" class="w-full py-2.5 rounded-xl bg-ink-card hover:bg-ink-raised border border-ink-border text-text-primary font-medium transition-colors text-sm">
+                        <button onclick="showSimConditions()" class="w-full py-2.5 rounded-xl bg-ink-card/90 hover:bg-ink-raised border border-ink-border text-text-primary font-medium transition-colors text-sm">
                             Modify conditions
                         </button>
                     </div>
@@ -949,18 +1016,18 @@
 
     <!-- SCRIPT LOGIC -->
     <script>
-        // ---- IPL Team data ----
+        // ---- IPL Team data with official logos and RGB colors ----
         const IPL_TEAMS = {
-            'CSK': { name: 'Chennai Super Kings', short: 'CSK', city: 'Chennai', color: '#f9cd05', textColor: '#000' },
-            'MI':  { name: 'Mumbai Indians', short: 'MI', city: 'Mumbai', color: '#004ba0', textColor: '#fff' },
-            'RCB': { name: 'Royal Challengers Bengaluru', short: 'RCB', city: 'Bengaluru', color: '#d4213d', textColor: '#fff' },
-            'KKR': { name: 'Kolkata Knight Riders', short: 'KKR', city: 'Kolkata', color: '#3a225d', textColor: '#f5c518' },
-            'GT':  { name: 'Gujarat Titans', short: 'GT', city: 'Ahmedabad', color: '#1c1c2b', textColor: '#a7d1e8' },
-            'RR':  { name: 'Rajasthan Royals', short: 'RR', city: 'Jaipur', color: '#ea1a85', textColor: '#fff' },
-            'SRH': { name: 'Sunrisers Hyderabad', short: 'SRH', city: 'Hyderabad', color: '#f7651b', textColor: '#000' },
-            'DC':  { name: 'Delhi Capitals', short: 'DC', city: 'Delhi', color: '#004c93', textColor: '#ef1b23' },
-            'PBKS':{ name: 'Punjab Kings', short: 'PBKS', city: 'Mohali', color: '#dd1f2d', textColor: '#fff' },
-            'LSG': { name: 'Lucknow Super Giants', short: 'LSG', city: 'Lucknow', color: '#003b7a', textColor: '#a4d8f0' }
+            'CSK': { name: 'Chennai Super Kings', short: 'CSK', city: 'Chennai', color: '#f9cd05', rgb: '249, 205, 5', logo: 'assets/logos/CSK.png' },
+            'MI':  { name: 'Mumbai Indians', short: 'MI', city: 'Mumbai', color: '#004ba0', rgb: '0, 75, 160', logo: 'assets/logos/MI.png' },
+            'RCB': { name: 'Royal Challengers Bengaluru', short: 'RCB', city: 'Bengaluru', color: '#d4213d', rgb: '212, 33, 61', logo: 'assets/logos/RCB.png' },
+            'KKR': { name: 'Kolkata Knight Riders', short: 'KKR', city: 'Kolkata', color: '#3a225d', rgb: '58, 34, 93', logo: 'assets/logos/KKR.png' },
+            'GT':  { name: 'Gujarat Titans', short: 'GT', city: 'Ahmedabad', color: '#1c2a38', rgb: '28, 42, 56', logo: 'assets/logos/GT.png' },
+            'RR':  { name: 'Rajasthan Royals', short: 'RR', city: 'Jaipur', color: '#ea1a85', rgb: '234, 26, 133', logo: 'assets/logos/RR.png' },
+            'SRH': { name: 'Sunrisers Hyderabad', short: 'SRH', city: 'Hyderabad', color: '#f7651b', rgb: '247, 101, 27', logo: 'assets/logos/SRH.png' },
+            'DC':  { name: 'Delhi Capitals', short: 'DC', city: 'Delhi', color: '#004c93', rgb: '0, 76, 147', logo: 'assets/logos/DC.png' },
+            'PBKS':{ name: 'Punjab Kings', short: 'PBKS', city: 'Mohali', color: '#dd1f2d', rgb: '221, 31, 45', logo: 'assets/logos/PBKS.png' },
+            'LSG': { name: 'Lucknow Super Giants', short: 'LSG', city: 'Lucknow', color: '#0057b8', rgb: '0, 87, 184', logo: 'assets/logos/LSG.png' }
         };
 
         function updateTeamLogos() {
@@ -969,15 +1036,66 @@
             const team1 = IPL_TEAMS[t1];
             const team2 = IPL_TEAMS[t2];
 
-            const logo1 = document.getElementById('team1Logo');
-            logo1.style.background = team1.color;
-            logo1.style.color = team1.textColor;
-            logo1.textContent = team1.short;
+            const img1 = document.getElementById('team1LogoImg');
+            const img2 = document.getElementById('team2LogoImg');
+            if (img1) {
+                img1.src = team1.logo;
+                img1.alt = team1.name;
+            }
+            if (img2) {
+                img2.src = team2.logo;
+                img2.alt = team2.name;
+            }
 
-            const logo2 = document.getElementById('team2Logo');
-            logo2.style.background = team2.color;
-            logo2.style.color = team2.textColor;
-            logo2.textContent = team2.short;
+            const name1 = document.getElementById('team1NameText');
+            const name2 = document.getElementById('team2NameText');
+            if (name1) name1.textContent = team1.name;
+            if (name2) name2.textContent = team2.name;
+
+            const box1 = document.getElementById('team1LogoBox');
+            const box2 = document.getElementById('team2LogoBox');
+            if (box1) box1.style.borderColor = `rgba(${team1.rgb}, 0.40)`;
+            if (box2) box2.style.borderColor = `rgba(${team2.rgb}, 0.40)`;
+        }
+
+        function updateSplitBackground() {
+            const t1 = document.getElementById('simTeam1').value;
+            const t2 = document.getElementById('simTeam2').value;
+            const team1 = IPL_TEAMS[t1];
+            const team2 = IPL_TEAMS[t2];
+            
+            const isDark = document.documentElement.classList.contains('dark');
+            const op1 = isDark ? 0.32 : 0.16;
+            const op2 = isDark ? 0.32 : 0.16;
+            
+            const leftGrad = document.getElementById('simSplitLeftGrad');
+            const rightGrad = document.getElementById('simSplitRightGrad');
+            const leftLogo = document.getElementById('simSplitLeftLogo');
+            const rightLogo = document.getElementById('simSplitRightLogo');
+            
+            if (leftGrad) {
+                leftGrad.style.background = `linear-gradient(135deg, rgba(${team1.rgb}, ${op1}) 0%, rgba(${team1.rgb}, ${op1 * 0.25}) 100%)`;
+            }
+            if (rightGrad) {
+                rightGrad.style.background = `linear-gradient(225deg, rgba(${team2.rgb}, ${op2}) 0%, rgba(${team2.rgb}, ${op2 * 0.25}) 100%)`;
+            }
+            if (leftLogo) leftLogo.src = team1.logo;
+            if (rightLogo) rightLogo.src = team2.logo;
+
+            // Update showdown header in result view
+            const rT1Logo = document.getElementById('simResultTeam1Logo');
+            const rT2Logo = document.getElementById('simResultTeam2Logo');
+            const rT1Name = document.getElementById('simResultTeam1Name');
+            const rT2Name = document.getElementById('simResultTeam2Name');
+            const rTarget = document.getElementById('simResultTargetDisplay');
+            const rVenue = document.getElementById('simResultVenueSub');
+            
+            if (rT1Logo) rT1Logo.src = team1.logo;
+            if (rT2Logo) rT2Logo.src = team2.logo;
+            if (rT1Name) rT1Name.textContent = team1.name;
+            if (rT2Name) rT2Name.textContent = team2.name;
+            if (rTarget) rTarget.textContent = `${document.getElementById('inputTarget').value} runs`;
+            if (rVenue) rVenue.textContent = document.getElementById('simVenue').value.split('(')[0].trim();
         }
 
         // ---- Theme ----
@@ -992,7 +1110,7 @@
                 html.classList.add('dark');
                 localStorage.setItem('prism-theme', 'dark');
             }
-            // Recreate charts for new theme
+            updateSplitBackground();
             initCharts();
         }
 
@@ -1060,12 +1178,12 @@
                 document.getElementById('topBarTitle').innerText = PAGE_TITLES[pageId];
             }
 
-            // On simulator, show page 1 by default
+            // On simulator, default to condition page
             if (pageId === 'simulator') {
                 showSimConditions();
             }
 
-            // Apply special background for simulator
+            // Special background for simulator
             const mainArea = document.querySelector('.flex-1.md\\:pl-\\[72px\\]');
             if (pageId === 'simulator') {
                 const isDark = document.documentElement.classList.contains('dark');
@@ -1093,11 +1211,13 @@
         function showSimConditions() {
             document.getElementById('simPage1').classList.remove('hidden');
             document.getElementById('simPage2').classList.add('hidden');
+            window.scrollTo({ top: 0, behavior: 'instant' });
         }
 
         function showSimResults() {
             updateSimStats();
             executeSimulation();
+            updateSplitBackground();
             document.getElementById('simPage1').classList.add('hidden');
             document.getElementById('simPage2').classList.remove('hidden');
             window.scrollTo({ top: 0, behavior: 'instant' });
@@ -1253,7 +1373,7 @@
                 { match: `${t2} vs KKR`, result: "Won chase", sim: "84%" }
             ];
             document.getElementById('step3Neighbors').innerHTML = neighbors.map(n => `
-                <div class="flex justify-between items-center py-1.5 px-2.5 rounded-md bg-ink-deep">
+                <div class="flex justify-between items-center py-1.5 px-2.5 rounded-md bg-ink-deep/80">
                     <span class="text-text-secondary">${n.match}</span>
                     <span class="text-text-muted font-mono">${n.result} (${n.sim} match)</span>
                 </div>
@@ -1365,6 +1485,7 @@
             updateTeamLogos();
             updateSimStats();
             executeSimulation();
+            updateSplitBackground();
             initCharts();
 
             if (window.location.hash) {
