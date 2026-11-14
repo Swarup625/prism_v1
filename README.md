@@ -319,12 +319,12 @@ prism_v1/
 This project is licensed under the MIT License.
 
 ```bibtex
-@article{prism2024,
-  title={PRISM: Prediction Reliability and Intelligent Self-Correction Mechanism for Dynamic Match State Inference},
-  author={PRISM Research Team},
-  year={2024},
-  publisher={GitHub},
-  journal={GitHub Repository},
-  howpublished={\url{https://github.com/Swarup625/PRISM}}
+@article{Swarup2026prism,
+  title={PRISM: A Post-Prediction Reliability Framework for Evidence-Guided Correction and Selective Abstention},
+  author={Swarup, Omm and Hiremath, Shrishail M.},
+  year={2026},
+  eprint={8345564},
+  archivePrefix={arXiv},
+  primaryClass={cs.NI},
 }
 ```
